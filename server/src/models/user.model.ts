@@ -1,13 +1,16 @@
+import { prisma } from "../lib/prisma";
 import { User } from "../types/user.type";
 
 const users: User[] = [];
 
-const fetchAll = () => {
-  return users;
+const fetchAll = async () => {
+  return await prisma.user.findMany();
 };
 
-const fetchUserById = (id: string) => {
-  const user = users.find((user) => user.id === id);
+const fetchUserById = async (id: number) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
   if (!user) {
     return null;
   }
