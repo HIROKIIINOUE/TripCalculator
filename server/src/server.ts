@@ -1,13 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+import userRouter from "./routes/user.route";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.DEV_PORT;
 
-app.get("/", (req, res) => {
-  res.status(200).send("Welcome");
-});
+app.use("/users", userRouter);
 
 app.use((req, res) => {
   res.status(404).send("Invalid Page");
