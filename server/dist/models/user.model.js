@@ -14,7 +14,7 @@ const users = [];
 const fetchAll = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma_1.prisma.user.findMany();
 });
-const fetchUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const fetchById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield prisma_1.prisma.user.findUnique({
         where: { id },
     });
@@ -23,7 +23,22 @@ const fetchUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return user;
 });
+const add = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma_1.prisma.user.create({ data });
+});
+const update = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma_1.prisma.user.update({
+        where: { id },
+        data,
+    });
+});
+const remove = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma_1.prisma.user.delete({ where: { id } });
+});
 exports.default = {
     fetchAll,
-    fetchUserById,
+    fetchById,
+    add,
+    update,
+    remove,
 };

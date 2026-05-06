@@ -5,6 +5,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.DEV_PORT;
+app.use(express.json());
 
 app.use("/users", userRouter);
 
