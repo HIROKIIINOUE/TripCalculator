@@ -1,10 +1,5 @@
-export type User = {
-  id: number;
-  displayName: string;
-  email: string;
-  password: string;
-};
+import { User } from "../generated/prisma/client";
 
 export type CreateUserBody = Omit<User, "id">;
-
 export type UpdateUserBody = Partial<CreateUserBody>;
+export type PublicUserBody = Omit<User, "password">;
