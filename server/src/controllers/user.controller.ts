@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import userModel from "../models/user.model";
-import { CreateUserBody, UpdateUserBody, User } from "../types/user.types";
+import { UpdateUserBody } from "../types/user.types";
+import zxcvbn from "zxcvbn";
+import { User } from "../generated/prisma/client";
+import { createUserSchema } from "../schemas/user.schema";
 
 // get all users
 const getAllUsers = async (req: Request, res: Response) => {
@@ -31,16 +34,33 @@ const getUserById = async (req: Request<{ id: string }>, res: Response) => {
 };
 
 // user signup
-const addUser = async (req: Request<{}, {}, CreateUserBody>, res: Response) => {
-  const { displayName, email, password } = req.body;
+const addUser = async (req: Request, res: Response) => {
+  const parsed = createUserSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: parsed.error.issues });
+    return;
+  }
+  const { displayName, email, password, language } = parsed.data;
+
+  const passwordScore = zxcvbn(password).score;
+  if (passwordScore <= 1) {
+    res.status(400).json({ message: "password is too weak" });
+    return;
+  }
 
   try {
-    const newUser = await userModel.add({ displayName, email, password });
+    const newUser: User | null = await userModel.add({
+      displayName,
+      email,
+      password,
+      language,
+    });
     if (!newUser) {
-      res.status(400).json({ message: "Failed to add user" });
+      res.status(400).json({ message: "User exists already" });
       return;
     }
-    res.status(201).json(newUser);
+    const { password: _password, ...publicUser } = newUser;
+    res.status(201).json(publicUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

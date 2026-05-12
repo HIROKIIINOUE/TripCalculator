@@ -1,5 +1,6 @@
+import { User } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
-import { User } from "../types/user.types";
+import bcrypt from "bcrypt";
 
 const users: User[] = [];
 
@@ -18,7 +19,21 @@ const fetchById = async (id: number) => {
 };
 
 const add = async (data: Omit<User, "id">) => {
-  return await prisma.user.create({ data });
+  const { email, password } = data;
+
+  const users = await fetchAll();
+  const existUser = users.find((user) => user.email === email);
+  if (existUser) {
+    return null;
+  }
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  return await prisma.user.create({
+    data: {
+      ...data,
+      password: hashedPassword,
+    },
+  });
 };
 
 const update = async (id: number, data: Partial<User>) => {
