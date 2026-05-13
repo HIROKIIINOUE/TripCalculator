@@ -1,6 +1,7 @@
 import { User } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
+import { LoginUserBody } from "../schemas/user.schema";
 
 const users: User[] = [];
 
@@ -36,6 +37,21 @@ const add = async (data: Omit<User, "id">) => {
   });
 };
 
+const checkAuth = async (data: LoginUserBody) => {
+  const { email, password } = data;
+  const targetUser = await prisma.user.findUnique({
+    where: { email },
+  });
+  if (!targetUser) {
+    return null;
+  }
+  const isPassword = await bcrypt.compare(password, targetUser.password);
+  if (!isPassword) {
+    return null;
+  }
+  return targetUser;
+};
+
 const update = async (id: number, data: Partial<User>) => {
   return await prisma.user.update({
     where: { id },
@@ -51,6 +67,7 @@ export default {
   fetchAll,
   fetchById,
   add,
+  checkAuth,
   update,
   remove,
 };

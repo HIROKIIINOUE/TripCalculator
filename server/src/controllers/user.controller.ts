@@ -2,21 +2,28 @@ import { Request, Response } from "express";
 import userModel from "../models/user.model";
 import { UpdateUserBody } from "../types/user.types";
 import zxcvbn from "zxcvbn";
-import { User } from "../generated/prisma/client";
-import { createUserSchema } from "../schemas/user.schema";
+import { Language, User } from "../generated/prisma/client";
+import { createUserSchema, loginUserSchema } from "../schemas/user.schema";
 
-// get all users
+// get all users　ここのレスポンスはパスワード省いて
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await userModel.fetchAll();
-    res.status(200).json(users);
+    const publicUsers = users.map((user) => {
+      return {
+        id: user.id,
+        displayName: user.displayName,
+        Language: user.language,
+      };
+    });
+    res.status(200).json(publicUsers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// user signin
+// get unique user
 const getUserById = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
 
@@ -67,6 +74,31 @@ const addUser = async (req: Request, res: Response) => {
   }
 };
 
+// user login
+const login = async (req: Request, res: Response) => {
+  const parsed = loginUserSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ message: parsed.error.issues });
+    return;
+  }
+  const { email, password } = parsed.data;
+  try {
+    const loggedInUser: User | null = await userModel.checkAuth({
+      email,
+      password,
+    });
+    if (!loggedInUser) {
+      res.status(401).json({ message: "username or password is wrong" });
+      return;
+    }
+    const { password: _password, ...publicUser } = loggedInUser;
+    res.status(200).json(publicUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 // user update
 // NOTE: Revise Request's Type
 const updateUser = async (
@@ -106,6 +138,7 @@ export default {
   getAllUsers,
   getUserById,
   addUser,
+  login,
   updateUser,
   deleteUser,
 };
