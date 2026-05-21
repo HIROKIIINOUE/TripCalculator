@@ -18,6 +18,7 @@ model User {
   email  String @unique
   language Language @default(en)
   password  String
+  hashedRefreshToken String?
 }
 
 enum Language {

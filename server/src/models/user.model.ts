@@ -3,8 +3,6 @@ import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 import { LoginUserBody } from "../schemas/user.schema";
 
-const users: User[] = [];
-
 const fetchAll = async () => {
   return await prisma.user.findMany();
 };
@@ -19,24 +17,33 @@ const fetchById = async (id: number) => {
   return user;
 };
 
-const add = async (data: Omit<User, "id">) => {
+// Create new user
+const add = async (data: Omit<User, "id" | "hashedRefreshToken">) => {
   const { email, password } = data;
 
-  const users = await fetchAll();
-  const existUser = users.find((user) => user.email === email);
+  const existUser = await prisma.user.findUnique({
+    where: { email },
+  });
   if (existUser) {
     return null;
   }
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  return await prisma.user.create({
-    data: {
-      ...data,
-      password: hashedPassword,
-    },
-  });
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        ...data,
+        password: hashedPassword,
+      },
+    });
+    return newUser;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
+// Check user's login
 const checkAuth = async (data: LoginUserBody) => {
   const { email, password } = data;
   const targetUser = await prisma.user.findUnique({
@@ -52,15 +59,13 @@ const checkAuth = async (data: LoginUserBody) => {
   return targetUser;
 };
 
-const update = async (id: number, data: Partial<User>) => {
-  return await prisma.user.update({
+// Store user's refresh token after success in login
+const storeHashedRefreshToken = async (id: number, refreshToken: string) => {
+  const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+  await prisma.user.update({
     where: { id },
-    data,
+    data: { hashedRefreshToken },
   });
-};
-
-const remove = async (id: number) => {
-  return await prisma.user.delete({ where: { id } });
 };
 
 export default {
@@ -68,6 +73,5 @@ export default {
   fetchById,
   add,
   checkAuth,
-  update,
-  remove,
+  storeHashedRefreshToken,
 };
