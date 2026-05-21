@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import userModel from "../models/user.model";
-import { UpdateUserBody } from "../types/user.types";
 import zxcvbn from "zxcvbn";
-import { Prisma, User } from "../generated/prisma/client";
+import { User } from "../generated/prisma/client";
+import { handlePrismaUserError } from "../lib/prisma.errors";
 import { createUserSchema, loginUserSchema } from "../schemas/user.schema";
 import { generateTokens } from "../services/jwt.service";
 
-// get all users　ここのレスポンスはパスワード省いて
+// get all users
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await userModel.fetchAll();
@@ -19,6 +19,9 @@ const getAllUsers = async (req: Request, res: Response) => {
     });
     res.status(200).json(publicUsers);
   } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
@@ -36,6 +39,9 @@ const getUserById = async (req: Request<{ id: string }>, res: Response) => {
     }
     res.status(200).json(user);
   } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
@@ -75,6 +81,9 @@ const addUser = async (req: Request, res: Response) => {
     } = newUser;
     res.status(201).json(publicUser);
   } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
@@ -120,11 +129,7 @@ const login = async (req: Request, res: Response) => {
       accessToken,
     }); // use accessToken in Authorization Bearer
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002" // unique regulation error
-    ) {
-      res.status(404).json({ message: "User was not found" });
+    if (handlePrismaUserError(error, res)) {
       return;
     }
     console.error(error);

@@ -29,18 +29,13 @@ const add = async (data: Omit<User, "id" | "hashedRefreshToken">) => {
   }
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  try {
-    const newUser = await prisma.user.create({
-      data: {
-        ...data,
-        password: hashedPassword,
-      },
-    });
-    return newUser;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  const newUser = await prisma.user.create({
+    data: {
+      ...data,
+      password: hashedPassword,
+    },
+  });
+  return newUser;
 };
 
 // Check user's login
