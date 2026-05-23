@@ -192,10 +192,59 @@ const restoreAccessToken = async (req: Request, res: Response) => {
   }
 };
 
+// user logout
+const logout = async (req: Request, res: Response) => {
+  const { refreshToken } = req.signedCookies;
+  if (!refreshToken) {
+    res.clearCookie("refreshToken");
+    res.status(200).json({ message: "User logged out successfully" });
+    return;
+  }
+
+  let payload;
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch (error) {
+    res.clearCookie("refreshToken");
+    // user can logout even though refresh token is expired
+    res.status(200).json({ message: "User logged out successfully" });
+    return;
+  }
+
+  if (!payload || typeof payload === "string") {
+    res.status(400).json({ message: "Failed to logout" });
+    return;
+  }
+  const id = Number(payload.sub);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ message: "Invalid user id" });
+    return;
+  }
+
+  try {
+    const loggedOutUser = await userModel.removeRefreshToken(id);
+    if (!loggedOutUser) {
+      res.status(400).json({ message: "Failed to logout" });
+      return;
+    }
+    res.clearCookie("refreshToken");
+    const { email: _email, password: _password, ...publicUser } = loggedOutUser;
+    res.status(200).json({ publicUser });
+  } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
   addUser,
   login,
   restoreAccessToken,
+  logout,
 };

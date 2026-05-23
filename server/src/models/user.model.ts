@@ -80,6 +80,16 @@ const checkHashedRefreshToken = async (id: number, refreshToken: string) => {
   return isCorrectRefreshToken;
 };
 
+const removeRefreshToken = async (id: number) => {
+  const targetUser = await prisma.user.update({
+    where: { id },
+    data: {
+      hashedRefreshToken: null,
+    },
+  });
+  return targetUser;
+};
+
 export default {
   fetchAll,
   fetchById,
@@ -87,4 +97,5 @@ export default {
   checkAuth,
   storeHashedRefreshToken,
   checkHashedRefreshToken,
+  removeRefreshToken,
 };

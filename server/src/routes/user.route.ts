@@ -9,5 +9,6 @@ userRouter.get("/:id", authMiddleware, userController.getUserById);
 userRouter.post("/signup", userController.addUser);
 userRouter.post("/login", userController.login);
 userRouter.post("/refresh", userController.restoreAccessToken);
+userRouter.post("/logout", userController.logout);
 
 export default userRouter;
