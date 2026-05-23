@@ -4,7 +4,11 @@ import zxcvbn from "zxcvbn";
 import { User } from "../generated/prisma/client";
 import { handlePrismaUserError } from "../lib/prisma.errors";
 import { createUserSchema, loginUserSchema } from "../schemas/user.schema";
-import { generateTokens } from "../services/jwt.service";
+import {
+  generateTokens,
+  regenerateAccessToken,
+  verifyRefreshToken,
+} from "../services/jwt.service";
 
 // get all users
 const getAllUsers = async (req: Request, res: Response) => {
@@ -137,9 +141,61 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+// <JWT> refresh access token based on refresh token
+const restoreAccessToken = async (req: Request, res: Response) => {
+  const { refreshToken } = req.signedCookies;
+  if (!refreshToken) {
+    res.status(400).json({ message: "Refresh token is required" });
+    return;
+  }
+
+  let payload;
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Invalid or expired refresh token" });
+    return;
+  }
+
+  if (typeof payload === "string" || !payload.sub) {
+    res.status(400).json({ message: "Invalid or expired refresh token" });
+    return;
+  }
+
+  const id = Number(payload.sub);
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ message: "Invalid user id" });
+    return;
+  }
+
+  try {
+    const isCorrectRefreshToken = await userModel.checkHashedRefreshToken(
+      id,
+      refreshToken,
+    );
+
+    if (isCorrectRefreshToken) {
+      const accessToken = regenerateAccessToken(id);
+      res.status(200).json({
+        accessToken,
+      });
+    } else {
+      res.status(401).json({ message: "Wrong refresh token" });
+    }
+  } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
   addUser,
   login,
+  restoreAccessToken,
 };

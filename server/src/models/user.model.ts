@@ -54,7 +54,7 @@ const checkAuth = async (data: LoginUserBody) => {
   return targetUser;
 };
 
-// Store user's refresh token after success in login
+// Store user's refresh token on DB after success in login
 const storeHashedRefreshToken = async (id: number, refreshToken: string) => {
   const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
   await prisma.user.update({
@@ -63,10 +63,28 @@ const storeHashedRefreshToken = async (id: number, refreshToken: string) => {
   });
 };
 
+// compare user's refresh token with refresh token on DB
+const checkHashedRefreshToken = async (id: number, refreshToken: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+
+  if (!user?.hashedRefreshToken) {
+    return false;
+  }
+  const isCorrectRefreshToken = await bcrypt.compare(
+    refreshToken,
+    user.hashedRefreshToken,
+  );
+
+  return isCorrectRefreshToken;
+};
+
 export default {
   fetchAll,
   fetchById,
   add,
   checkAuth,
   storeHashedRefreshToken,
+  checkHashedRefreshToken,
 };
