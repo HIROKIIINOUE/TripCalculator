@@ -240,6 +240,26 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+  const id = req.userId;
+  if (!id) {
+    res.status(400).json({ message: "Id is not valid" });
+    return;
+  }
+  try {
+    const deletedUser = await userModel.deleteAccount(id);
+    res.clearCookie("refreshToken");
+    res
+      .status(204)
+      .json({ message: `${deletedUser.displayName} was deleted successfully` });
+  } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
@@ -247,4 +267,5 @@ export default {
   login,
   restoreAccessToken,
   logout,
+  deleteUser,
 };

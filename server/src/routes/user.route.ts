@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import userController from "../controllers/user.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 
@@ -10,5 +10,6 @@ userRouter.post("/signup", userController.addUser);
 userRouter.post("/login", userController.login);
 userRouter.post("/refresh", userController.restoreAccessToken);
 userRouter.post("/logout", userController.logout);
+userRouter.delete("/me", authMiddleware, userController.deleteUser);
 
 export default userRouter;

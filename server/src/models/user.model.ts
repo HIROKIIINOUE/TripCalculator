@@ -90,6 +90,13 @@ const removeRefreshToken = async (id: number) => {
   return targetUser;
 };
 
+const deleteAccount = async (id: number) => {
+  const deletedUser = await prisma.user.delete({
+    where: { id },
+  });
+  return deletedUser;
+};
+
 export default {
   fetchAll,
   fetchById,
@@ -98,4 +105,5 @@ export default {
   storeHashedRefreshToken,
   checkHashedRefreshToken,
   removeRefreshToken,
+  deleteAccount,
 };
