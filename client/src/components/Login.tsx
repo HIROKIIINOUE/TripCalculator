@@ -1,16 +1,53 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { LoginSchema, type LoginForm } from '../schemas/authPage.schema'
+import toast from 'react-hot-toast'
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
 
-  const handleLogin = (data: LoginForm) => {
+  const handleLogin = async (data: LoginForm) => {
     const payload = {
       email: data.email,
       password: data.password
     }
-    console.log(payload)
+    try {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL_DEV
+      const res = await fetch(`${backendUrl}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      })
+      switch (res.status) {
+        case 200: {
+          const result = await res.json()
+          toast.success(`Welcome ${result.displayName}`)
+          return
+        }
+        case 400: {
+          toast.error("ログイン情報を正しく入力してくださいJP")
+          return
+        }
+        case 401: {
+          toast.error("パスワードorメールアドレスが間違っています。JP")
+          return;
+        }
+        case 500: {
+          toast.error("通信接続に失敗しました。ネットワーク状況をお確かめください")
+          return
+        }
+        default: {
+          toast.error("ログインに失敗しましたJP")
+          return
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error("ログインに失敗しました。再度ログインしてください。")
+    }
   }
 
   return (
