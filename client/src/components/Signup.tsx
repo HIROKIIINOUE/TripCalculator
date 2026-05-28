@@ -3,6 +3,7 @@ import { SignupSchema, type SignupForm } from '../schemas/authPage.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import zxcvbn from "zxcvbn";
 import PasswordStrengthUI from './PasswordStrengthUI';
+import toast from 'react-hot-toast';
 
 
 const Signup = () => {
@@ -12,14 +13,52 @@ const Signup = () => {
   const score = zxcvbn(password).score
 
 
-  const handleSignup = (data: SignupForm) => {
+  // signup logic
+  const handleSignup = async (data: SignupForm) => {
+    if (score <= 2) {
+      toast.error("パスワードが弱すぎます。レベルをgood以上にしてください")
+      return
+    }
     const payload = {
       displayName: data.displayName,
       email: data.email,
       password: data.password,
       language: "en"  // <Later> get and set app's setup language 
     }
-    console.log(payload)
+    const backendUrl = import.meta.env.VITE_BACKEND_URL_DEV
+
+    try {
+      const res = await fetch(`${backendUrl}/users/signup`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+      switch (res.status) {
+        case 201: {
+          const result = await res.json()
+          toast.success(`${result.displayName} / サインアップに成功しました:JP`)
+          return
+        }
+        case 409: {
+          toast.error("既にユーザが存在しています。ログイン画面よりログインしてください。JP")
+          return
+        }
+        case 500: {
+          toast.error("通信接続に失敗しました。ネットワーク状況をお確かめください")
+          return
+        }
+        default: {
+          toast.error("サインアップに失敗しました:JP")
+          return
+        }
+      }
+
+    } catch (error) {
+      console.error(error)
+      toast.error('通信接続に失敗しました:JP')
+    }
   }
 
   return (
