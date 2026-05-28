@@ -5,6 +5,7 @@ import Home from './components/Home'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import NotFount from './components/NotFount'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
 
@@ -18,6 +19,10 @@ function App() {
           <Route path='*' element={<NotFount />} />
         </Route>
       </Routes>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </BrowserRouter>
   )
 }
