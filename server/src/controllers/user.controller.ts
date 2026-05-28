@@ -61,7 +61,7 @@ const addUser = async (req: Request, res: Response) => {
   const { displayName, email, password, language } = parsed.data;
 
   const passwordScore = zxcvbn(password).score;
-  if (passwordScore <= 1) {
+  if (passwordScore <= 2) {
     res.status(400).json({ message: "password is too weak" });
     return;
   }
