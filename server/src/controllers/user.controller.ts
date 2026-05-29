@@ -260,6 +260,29 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+// Middleware already verifies the access token.
+// This controller returns the current authenticated user.
+const getCurrentUser = async (req: Request, res: Response) => {
+  const id = req.userId;
+  try {
+    const user = await userModel.fetchById(Number(id));
+    if (!user) {
+      res.status(401).json({ message: "User doesn't exist" });
+      return;
+    }
+    const {
+      email: _email,
+      password: _password,
+      hashedRefreshToken: _hashedRefreshToken,
+      ...publicUser
+    } = user;
+    res.status(200).json(publicUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 export default {
   getAllUsers,
   getUserById,
@@ -268,4 +291,5 @@ export default {
   restoreAccessToken,
   logout,
   deleteUser,
+  getCurrentUser,
 };
