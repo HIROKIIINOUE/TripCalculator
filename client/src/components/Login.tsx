@@ -2,9 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { LoginSchema, type LoginForm } from '../schemas/authPage.schema'
 import toast from 'react-hot-toast'
+import { useAuth } from '../contexts/auth/useAuth'
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
+  const { login, clearAuth, } = useAuth()
 
   const handleLogin = async (data: LoginForm) => {
     const payload = {
@@ -21,9 +23,16 @@ const Login = () => {
         credentials: "include",
         body: JSON.stringify(payload),
       })
+
       switch (res.status) {
         case 200: {
           const result = await res.json()
+          // store login status globally
+          login({
+            id: result.id,
+            displayName: result.displayName,
+            language: result.language
+          }, result.accessToken,)
           toast.success(`Welcome ${result.displayName}`)
           return
         }
@@ -47,6 +56,9 @@ const Login = () => {
     } catch (error) {
       console.error(error)
       toast.error("ログインに失敗しました。再度ログインしてください。")
+      clearAuth()
+    } finally {
+      // 後ほどローディング画面判定用に使用
     }
   }
 
