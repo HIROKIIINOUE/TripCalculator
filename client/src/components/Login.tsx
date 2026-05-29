@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/auth/useAuth'
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
-  const { login, clearAuth, } = useAuth()
+  const { storeAuth, clearAuth, } = useAuth()
 
   const handleLogin = async (data: LoginForm) => {
     const payload = {
@@ -14,8 +14,8 @@ const Login = () => {
       password: data.password
     }
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL_DEV
-      const res = await fetch(`${backendUrl}/users/login`, {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+      const res = await fetch(`${BACKEND_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-type": "application/json"
@@ -28,7 +28,7 @@ const Login = () => {
         case 200: {
           const result = await res.json()
           // store login status globally
-          login({
+          storeAuth({
             id: result.id,
             displayName: result.displayName,
             language: result.language

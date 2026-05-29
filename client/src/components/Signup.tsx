@@ -25,10 +25,10 @@ const Signup = () => {
       password: data.password,
       language: "en"  // <Later> get and set app's setup language 
     }
-    const backendUrl = import.meta.env.VITE_BACKEND_URL_DEV
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
 
     try {
-      const res = await fetch(`${backendUrl}/users/signup`, {
+      const res = await fetch(`${BACKEND_URL}/users/signup`, {
         method: "POST",
         headers: {
           "Content-type": "application/json"
