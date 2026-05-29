@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { SignupSchema, type SignupForm } from '../schemas/authPage.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import zxcvbn from "zxcvbn";
-import PasswordStrengthUI from './PasswordStrengthUI';
+import PasswordStrengthUI from '../components/PasswordStrengthUI';
 import toast from 'react-hot-toast';
 
 
