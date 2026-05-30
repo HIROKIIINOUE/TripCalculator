@@ -7,8 +7,9 @@ import Signup from './pages/Signup'
 import { Toaster } from 'react-hot-toast'
 import { useAuth } from './contexts/auth/useAuth'
 import { useEffect } from 'react'
-import NotFount from './pages/NotFount'
 import Loading from './pages/Loading'
+import TripPage from './pages/Home/TripPage'
+import NotFound from './pages/NotFound'
 
 function App() {
   const { accessToken, authStatus, checkUserAuthentication, restoreAccessToken } = useAuth()
@@ -58,15 +59,25 @@ function App() {
                 <Navigate to="/home" replace /> :
                 <Signup />
             } />
-          <Route
-            path="home"
-            element={
-              authStatus === "authenticated" ?
-                <Home /> :
-                <Navigate to="/login" replace />
-            }
-          />
-          <Route path="*" element={<NotFount />} />
+          <Route path="home">
+            <Route
+              index
+              element={
+                authStatus === "authenticated" ?
+                  <Home /> :
+                  <Navigate to="/login" replace />
+              }
+            />
+            <Route
+              path=":tripId"
+              element={
+                authStatus === "authenticated" ?
+                  <TripPage /> :
+                  <Navigate to="/login" replace />
+              }
+            />
+          </Route>
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
       <Toaster
