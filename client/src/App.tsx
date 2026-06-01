@@ -10,6 +10,8 @@ import { useEffect } from 'react'
 import Loading from './pages/Loading'
 import TripPage from './pages/Home/TripPage'
 import NotFound from './pages/NotFound'
+import GuestRoute from './router/GuestRoute'
+import ProtectedRoute from './router/ProtectedRoute'
 
 function App() {
   const { accessToken, authStatus, checkUserAuthentication, restoreAccessToken } = useAuth()
@@ -44,37 +46,23 @@ function App() {
                 <Navigate to="/login" replace />
             }
           />
-          <Route
-            path="login"
-            element={
-              authStatus === "authenticated" ?
-                <Navigate to="/home" replace /> :
-                <Login />
-            }
-          />
-          <Route
-            path="signup"
-            element={
-              authStatus === "authenticated" ?
-                <Navigate to="/home" replace /> :
-                <Signup />
-            } />
-          <Route path="home">
+          <Route element={<GuestRoute />}>
+            <Route
+              path="login"
+              element={<Login />}
+            />
+            <Route
+              path="signup"
+              element={<Signup />} />
+          </Route>
+          <Route path="home" element={<ProtectedRoute />}>
             <Route
               index
-              element={
-                authStatus === "authenticated" ?
-                  <Home /> :
-                  <Navigate to="/login" replace />
-              }
+              element={<Home />}
             />
             <Route
               path=":tripId"
-              element={
-                authStatus === "authenticated" ?
-                  <TripPage /> :
-                  <Navigate to="/login" replace />
-              }
+              element={<TripPage />}
             />
           </Route>
           <Route path="*" element={<NotFound />} />
