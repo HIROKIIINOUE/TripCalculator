@@ -1,9 +1,9 @@
 import { MdContactSupport, MdLanguage } from 'react-icons/md'
 import { useLocation } from 'react-router'
-import ToSignupButton from './buttons/ToSignupButton';
-import ToLoginButton from './buttons/ToLoginButton';
-import ToHomeButton from './buttons/ToHomeButton';
-import LogoutButton from './buttons/LogoutButton';
+import ToSignupButton from './ToSignupButton';
+import ToLoginButton from './ToLoginButton';
+import ToHomeButton from './ToHomeButton';
+import LogoutButton from './LogoutButton';
 
 const Header = () => {
   const { pathname } = useLocation();

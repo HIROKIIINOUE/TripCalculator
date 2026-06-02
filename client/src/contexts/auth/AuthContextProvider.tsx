@@ -40,7 +40,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
     setAuthStatus("unauthenticated")
     return { result: "failure", data: null }
-
   }
 
   // try to restore access token from current logged-in user's refresh token in Cookie
