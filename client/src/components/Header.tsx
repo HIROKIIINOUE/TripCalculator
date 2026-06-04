@@ -6,11 +6,13 @@ import LogoutButton from './buttons/LogoutButton';
 import ToHomeButton from './buttons/ToHomeButton';
 import { useState } from 'react';
 import LanguageOptions from './LanguageOptions';
+import { useTranslation } from 'react-i18next';
 
 
 const Header = () => {
   const { pathname } = useLocation();
   const [isLanguageOption, setIsLanguageOption] = useState<boolean>(false)
+  const { t } = useTranslation()
 
   return (
     <>
@@ -19,10 +21,10 @@ const Header = () => {
         <div className='mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-8'>
           <div>
             <p className='text-xs font-semibold uppercase tracking-[0.3em] text-orange-400'>
-              Trip Calculator
+              {t("appName")}
             </p>
             <p className='mt-1 text-sm text-slate-500'>
-              Travel budget dashboard
+              {t("header.tagline")}
             </p>
           </div>
 
@@ -34,7 +36,7 @@ const Header = () => {
                 className='flex items-center gap-2 rounded-full border border-orange-300 bg-orange-200 px-4 py-2 text-sm font-medium text-orange-800 transition hover:-translate-y-0.5 hover:bg-orange-300 cursor-pointer'
               >
                 <MdLanguage className='text-lg' />
-                <span>言語設定</span>
+                <span>{t("header.languageSettings")}</span>
               </button>
             </li>
             <li>
@@ -54,7 +56,7 @@ const Header = () => {
                 className='flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-800 transition hover:-translate-y-0.5 hover:border-orange-300 hover:bg-orange-100 hover:text-orange-700'
               >
                 <MdContactSupport className='text-lg' />
-                <span>お問い合わせ</span>
+                <span>{t("actions.contact")}</span>
               </button>
             </li>
           </ul>

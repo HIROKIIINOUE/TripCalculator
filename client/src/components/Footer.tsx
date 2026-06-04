@@ -6,10 +6,12 @@ import LogoutButton from './buttons/LogoutButton'
 import ToHomeButton from './buttons/ToHomeButton'
 import { useState } from 'react'
 import LanguageOptions from './LanguageOptions'
+import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
   const { pathname } = useLocation()
   const [isLanguageOption, setIsLanguageOption] = useState<boolean>(false)
+  const { t } = useTranslation()
 
 
   return (
@@ -24,7 +26,7 @@ const Footer = () => {
               className='flex w-full flex-col items-center justify-center gap-1 rounded-2xl bg-orange-200 px-3 py-2 text-orange-800 transition active:scale-95'
             >
               <MdLanguage className='text-xl' />
-              <span className='text-xs'>言語</span>
+              <span className='text-xs'>{t("actions.language")}</span>
             </button>
           </li>
           <li>
@@ -44,7 +46,7 @@ const Footer = () => {
               className='flex w-full flex-col items-center justify-center gap-1 rounded-2xl bg-orange-50 px-3 py-2 text-slate-700 ring-1 ring-orange-200 transition active:scale-95'
             >
               <MdContactSupport className='text-xl' />
-              <span className='text-xs'>問合せ</span>
+              <span className='text-xs'>{t("actions.contact")}</span>
             </button>
           </li>
         </ul>
