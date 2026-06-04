@@ -6,6 +6,14 @@ export const authTranslations = {
       emailPlaceholder: "Email address",
       passwordLabel: "Password",
       submit: "Log in",
+      errors: {
+        email: {
+          invalid: "Please enter a valid email address.",
+        },
+        password: {
+          min: "Password must be at least 6 characters.",
+        },
+      },
       success: "Welcome {{displayName}}",
       invalidInput: "Please enter your login information correctly.",
       invalidCredentials: "Incorrect email address or password.",
@@ -21,6 +29,18 @@ export const authTranslations = {
       emailPlaceholder: "Email address",
       passwordLabel: "Password",
       submit: "Sign up",
+      errors: {
+        displayName: {
+          required: "Name is required.",
+          max: "Display name must be 16 characters or fewer.",
+        },
+        email: {
+          invalid: "Please enter a valid email address.",
+        },
+        password: {
+          min: "Password must be at least 6 characters.",
+        },
+      },
       weakPassword: "Your password is too weak. Please make it at least good.",
       success: "{{displayName}}, your signup was successful.",
       alreadyExists: "A user already exists. Please log in from the login page.",
@@ -40,6 +60,14 @@ export const authTranslations = {
       emailPlaceholder: "メールアドレス",
       passwordLabel: "パスワード",
       submit: "ログイン",
+      errors: {
+        email: {
+          invalid: "正しいメールアドレスを入力してください",
+        },
+        password: {
+          min: "パスワードは6文字以上で入力してください",
+        },
+      },
       success: "{{displayName}}さん、ようこそ",
       invalidInput: "ログイン情報を正しく入力してください",
       invalidCredentials: "パスワードまたはメールアドレスが間違っています。",
@@ -55,6 +83,18 @@ export const authTranslations = {
       emailPlaceholder: "メールアドレス",
       passwordLabel: "パスワード",
       submit: "サインアップ",
+      errors: {
+        displayName: {
+          required: "名前は必須です",
+          max: "表示名は16文字以内で決めてください",
+        },
+        email: {
+          invalid: "正しいメールアドレスを入力してください",
+        },
+        password: {
+          min: "パスワードは6文字以上で入力してください",
+        },
+      },
       weakPassword: "パスワードが弱すぎます。レベルをgood以上にしてください",
       success: "{{displayName}}さん、サインアップに成功しました",
       alreadyExists: "既にユーザが存在しています。ログイン画面よりログインしてください。",
@@ -74,6 +114,14 @@ export const authTranslations = {
       emailPlaceholder: "Adresse e-mail",
       passwordLabel: "Mot de passe",
       submit: "Se connecter",
+      errors: {
+        email: {
+          invalid: "Veuillez saisir une adresse e-mail valide.",
+        },
+        password: {
+          min: "Le mot de passe doit contenir au moins 6 caracteres.",
+        },
+      },
       success: "Bienvenue, {{displayName}}",
       invalidInput: "Veuillez saisir correctement vos informations de connexion.",
       invalidCredentials: "Adresse e-mail ou mot de passe incorrect.",
@@ -89,6 +137,18 @@ export const authTranslations = {
       emailPlaceholder: "Adresse e-mail",
       passwordLabel: "Mot de passe",
       submit: "S'inscrire",
+      errors: {
+        displayName: {
+          required: "Le nom est obligatoire.",
+          max: "Le nom d'affichage doit contenir 16 caracteres maximum.",
+        },
+        email: {
+          invalid: "Veuillez saisir une adresse e-mail valide.",
+        },
+        password: {
+          min: "Le mot de passe doit contenir au moins 6 caracteres.",
+        },
+      },
       weakPassword: "Votre mot de passe est trop faible. Veuillez atteindre au moins le niveau good.",
       success: "{{displayName}}, inscription reussie.",
       alreadyExists: "Un utilisateur existe deja. Veuillez vous connecter depuis la page de connexion.",
