@@ -9,6 +9,8 @@ const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
   const { storeAuth, clearAuth, } = useAuth()
   const { t } = useTranslation("auth")
+  const translateError = (message?: string) =>
+    message ? t(message.replace(/^auth\./, "")) : ""
 
   const handleLogin = async (data: LoginForm) => {
     const payload = {
@@ -90,7 +92,7 @@ const Login = () => {
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-200/70"
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
-            {errors.email?.message}
+            {translateError(errors.email?.message)}
           </p>
 
           <label
@@ -106,7 +108,7 @@ const Login = () => {
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
-            {errors.password?.message}
+            {translateError(errors.password?.message)}
           </p>
           <button
             type="submit"

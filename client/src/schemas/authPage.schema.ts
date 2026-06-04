@@ -3,17 +3,17 @@ import z from "zod";
 export const SignupSchema = z.object({
   displayName: z
     .string()
-    .min(1, "名前は必須です")
-    .max(16, "表示名は16文字以内で決めてください"),
-  email: z.email("正しいメールアドレスを入力してください"),
-  password: z.string().min(6, "パスワードは6文字以上で入力してください"),
+    .min(1, "auth.signup.errors.displayName.required")
+    .max(16, "auth.signup.errors.displayName.max"),
+  email: z.email("auth.signup.errors.email.invalid"),
+  password: z.string().min(6, "auth.signup.errors.password.min"),
 });
 
 export type SignupForm = z.infer<typeof SignupSchema>;
 
 export const LoginSchema = z.object({
-  email: z.email("正しいメールアドレスを入力してください"),
-  password: z.string().min(6, "パスワードは6文字以上で入力してください"),
+  email: z.email("auth.login.errors.email.invalid"),
+  password: z.string().min(6, "auth.login.errors.password.min"),
 });
 
 export type LoginForm = z.infer<typeof LoginSchema>;
