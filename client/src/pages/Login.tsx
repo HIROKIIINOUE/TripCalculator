@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form'
 import { LoginSchema, type LoginForm } from '../schemas/authPage.schema'
 import toast from 'react-hot-toast'
 import { useAuth } from '../contexts/auth/useAuth'
+import { useTranslation } from 'react-i18next'
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
   const { storeAuth, clearAuth, } = useAuth()
+  const { t } = useTranslation("auth")
 
   const handleLogin = async (data: LoginForm) => {
     const payload = {
@@ -33,29 +35,29 @@ const Login = () => {
             displayName: result.displayName,
             language: result.language
           }, result.accessToken,)
-          toast.success(`Welcome ${result.displayName}`)
+          toast.success(t("login.success", { displayName: result.displayName }))
           return
         }
         case 400: {
-          toast.error("ログイン情報を正しく入力してくださいJP")
+          toast.error(t("login.invalidInput"))
           return
         }
         case 401: {
-          toast.error("パスワードorメールアドレスが間違っています。JP")
+          toast.error(t("login.invalidCredentials"))
           return;
         }
         case 500: {
-          toast.error("通信接続に失敗しました。ネットワーク状況をお確かめください")
+          toast.error(t("login.networkError"))
           return
         }
         default: {
-          toast.error("ログインに失敗しましたJP")
+          toast.error(t("login.failed"))
           return
         }
       }
     } catch (error) {
       console.error(error)
-      toast.error("ログインに失敗しました。再度ログインしてください。")
+      toast.error(t("login.retry"))
       clearAuth()
     } finally {
       // 後ほどローディング画面判定用に使用
@@ -71,19 +73,19 @@ const Login = () => {
         >
           <div>
             <h2 className="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
-              ログイン
+              {t("login.title")}
             </h2>
           </div>
           <label
             htmlFor="email"
             className="mt-8 text-sm font-bold text-slate-700"
           >
-            メールアドレス
+            {t("login.emailLabel")}
           </label>
           <input
             id="email"
             type="email"
-            placeholder="メールアドレス"
+            placeholder={t("login.emailPlaceholder")}
             {...register("email")}
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-200/70"
           />
@@ -95,7 +97,7 @@ const Login = () => {
             htmlFor="password"
             className="mt-2 text-sm font-bold text-slate-700"
           >
-            パスワード
+            {t("login.passwordLabel")}
           </label>
           <input
             id="password"
@@ -110,7 +112,7 @@ const Login = () => {
             type="submit"
             className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 focus-visible:ring-4 focus-visible:ring-orange-300 active:translate-y-0"
           >
-            ログイン
+            {t("login.submit")}
           </button>
         </form>
       </div>

@@ -2,7 +2,16 @@ export const authTranslations = {
   en: {
     login: {
       title: "Log in",
+      emailLabel: "Email address",
+      emailPlaceholder: "Email address",
+      passwordLabel: "Password",
       submit: "Log in",
+      success: "Welcome {{displayName}}",
+      invalidInput: "Please enter your login information correctly.",
+      invalidCredentials: "Incorrect email address or password.",
+      networkError: "Connection failed. Please check your network status.",
+      failed: "Failed to log in.",
+      retry: "Failed to log in. Please try again.",
     },
     logout: {
       confirm: "Are you sure you want to log out?",
@@ -13,7 +22,16 @@ export const authTranslations = {
   ja: {
     login: {
       title: "ログイン",
+      emailLabel: "メールアドレス",
+      emailPlaceholder: "メールアドレス",
+      passwordLabel: "パスワード",
       submit: "ログイン",
+      success: "{{displayName}}さん、ようこそ",
+      invalidInput: "ログイン情報を正しく入力してください",
+      invalidCredentials: "パスワードまたはメールアドレスが間違っています。",
+      networkError: "通信接続に失敗しました。ネットワーク状況をお確かめください",
+      failed: "ログインに失敗しました",
+      retry: "ログインに失敗しました。再度ログインしてください。",
     },
     logout: {
       confirm: "ログアウトしますか？",
@@ -24,7 +42,16 @@ export const authTranslations = {
   fr: {
     login: {
       title: "Connexion",
+      emailLabel: "Adresse e-mail",
+      emailPlaceholder: "Adresse e-mail",
+      passwordLabel: "Mot de passe",
       submit: "Se connecter",
+      success: "Bienvenue, {{displayName}}",
+      invalidInput: "Veuillez saisir correctement vos informations de connexion.",
+      invalidCredentials: "Adresse e-mail ou mot de passe incorrect.",
+      networkError: "La connexion a echoue. Veuillez verifier votre reseau.",
+      failed: "Echec de la connexion.",
+      retry: "Echec de la connexion. Veuillez reessayer.",
     },
     logout: {
       confirm: "Voulez-vous vous déconnecter ?",
