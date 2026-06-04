@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import zxcvbn from "zxcvbn";
 import PasswordStrengthUI from '../components/PasswordStrengthUI';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 
 const Signup = () => {
@@ -11,12 +12,15 @@ const Signup = () => {
   const { register, handleSubmit, formState: { errors }, watch } = useForm<SignupForm>({ mode: "onChange", resolver: zodResolver(SignupSchema) })
   const password = watch("password") ?? ""
   const score = zxcvbn(password).score
+  const { t } = useTranslation("auth")
+  const translateError = (message?: string) =>
+    message ? t(message.replace(/^auth\./, "")) : ""
 
 
   // signup logic
   const handleSignup = async (data: SignupForm) => {
     if (score <= 2) {
-      toast.error("パスワードが弱すぎます。レベルをgood以上にしてください")
+      toast.error(t("signup.weakPassword"))
       return
     }
     const payload = {
@@ -38,26 +42,26 @@ const Signup = () => {
       switch (res.status) {
         case 201: {
           const result = await res.json()
-          toast.success(`${result.displayName} / サインアップに成功しました:JP`)
+          toast.success(t("signup.success", { displayName: result.displayName }))
           return
         }
         case 409: {
-          toast.error("既にユーザが存在しています。ログイン画面よりログインしてください。JP")
+          toast.error(t("signup.alreadyExists"))
           return
         }
         case 500: {
-          toast.error("通信接続に失敗しました。ネットワーク状況をお確かめください")
+          toast.error(t("signup.networkError"))
           return
         }
         default: {
-          toast.error("サインアップに失敗しました:JP")
+          toast.error(t("signup.failed"))
           return
         }
       }
 
     } catch (error) {
       console.error(error)
-      toast.error('通信接続に失敗しました:JP')
+      toast.error(t("signup.networkError"))
     }
   }
 
@@ -70,48 +74,48 @@ const Signup = () => {
         >
           <div>
             <h2 className="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
-              アカウント作成
+              {t("signup.title")}
             </h2>
           </div>
           <label
             htmlFor="displayName"
             className="mt-8 text-sm font-bold text-slate-700"
           >
-            名前
+            {t("signup.displayNameLabel")}
           </label>
           <input
             id="displayName"
             type="text"
-            placeholder="名前"
+            placeholder={t("signup.displayNamePlaceholder")}
             {...register("displayName")}
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
-            {errors.displayName?.message}
+            {translateError(errors.displayName?.message)}
           </p>
 
           <label
             htmlFor="email"
             className="mt-2 text-sm font-bold text-slate-700"
           >
-            メールアドレス
+            {t("signup.emailLabel")}
           </label>
           <input
             id="email"
             type="email"
-            placeholder="メールアドレス"
+            placeholder={t("signup.emailPlaceholder")}
             {...register("email")}
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-200/70"
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
-            {errors.email?.message}
+            {translateError(errors.email?.message)}
           </p>
 
           <label
             htmlFor="password"
             className="mt-2 text-sm font-bold text-slate-700"
           >
-            パスワード
+            {t("signup.passwordLabel")}
           </label>
           <input
             id="password"
@@ -120,7 +124,7 @@ const Signup = () => {
             className="mt-2 h-13 rounded-2xl border border-orange-200 bg-orange-50 px-4 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
-            {errors.password?.message}
+            {translateError(errors.password?.message)}
           </p>
 
           {password.length > 0 && (
@@ -133,7 +137,7 @@ const Signup = () => {
             type="submit"
             className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 focus-visible:ring-4 focus-visible:ring-orange-300 active:translate-y-0"
           >
-            サインアップ
+            {t("signup.submit")}
           </button>
         </form>
       </div>
