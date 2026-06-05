@@ -3,11 +3,12 @@ import { MdDeleteOutline } from "react-icons/md";
 
 type Props = {
   selectedTripIds: number[]
+  setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const TripOperationButton = (props: Props) => {
 
-  const { selectedTripIds } = props
+  const { selectedTripIds, setIsAddModalOpen } = props
 
   return (
     <>
@@ -22,6 +23,7 @@ const TripOperationButton = (props: Props) => {
       ) : (
         <button
           type="button"
+          onClick={() => setIsAddModalOpen(true)}
           className="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_14px_30px_-18px_rgba(249,115,22,0.95)] transition hover:bg-orange-600 focus:outline-none cursor-pointer"
         >
           <IoMdAdd className="text-lg" />

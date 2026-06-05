@@ -2,6 +2,7 @@ import type { Trip } from "../../types/trip.type"
 import TripList from "./components/TripList"
 import { useState } from "react"
 import TripOperationButton from "./components/TripOperationButton"
+import TripInputModal from "./components/TripInputModal"
 const dummyTrips: Trip[] = [
   {
     id: 1,
@@ -28,13 +29,15 @@ const dummyTrips: Trip[] = [
 
 const Home = () => {
   const [selectedTripIds, setSelectedTripIds] = useState<number[]>([])
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
 
 
   return (
     <div className="min-h-full px-4 py-6 sm:px-6 sm:py-8">
+      {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} />}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <div className="flex justify-end">
-          <TripOperationButton selectedTripIds={selectedTripIds} />
+          <TripOperationButton selectedTripIds={selectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
         </div>
         <TripList trips={dummyTrips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
       </div>
