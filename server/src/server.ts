@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/user.route";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import tripRouter from "./routes/trip.route";
 dotenv.config();
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use("/users", userRouter);
+app.use("/trips", tripRouter);
 
 app.use((req, res) => {
   res.status(404).send("Invalid Page");
