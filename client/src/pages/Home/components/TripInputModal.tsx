@@ -1,6 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TripSchema, type AddTripBody } from "../../../schemas/tripPage.schema";
+import { addTripSchema, type AddTripBody } from "../../../schemas/tripPage.schema";
 import CurrencyCombobox from "./CurrencyCombobox";
 
 type Props = {
@@ -12,7 +12,7 @@ const TripInputModal = (props: Props) => {
   const { setIsAddModalOpen } = props;
   const { register, handleSubmit, control, formState: { errors, isValid, isSubmitting } } = useForm<AddTripBody>({
     mode: "onChange",
-    resolver: zodResolver(TripSchema),
+    resolver: zodResolver(addTripSchema),
     defaultValues: {
       yourCurrency: "",
     },

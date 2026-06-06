@@ -1,7 +1,7 @@
 import z from "zod";
 import { supportedCurrencyCodes } from "../constants/currencies";
 
-export const TripSchema = z.object({
+export const addTripSchema = z.object({
   title: z.string().min(1, "trip.errors.title.required"),
   startDay: z.iso.date("trip.errors.startDay.invalid"), // "YYYY-MM-DD"形の文字列を通す
   budget: z
@@ -11,13 +11,15 @@ export const TripSchema = z.object({
     .refine((value) => Number(value) > 0, {
       message: "trip.errors.budget.min",
     }),
-  yourCurrency: z.string().refine(
-    (value) => supportedCurrencyCodes.includes(value),
-    "trip.errors.yourCurrency.invalid",
-  ),
+  yourCurrency: z
+    .string()
+    .refine(
+      (value) => supportedCurrencyCodes.includes(value),
+      "trip.errors.yourCurrency.invalid",
+    ),
 });
 
-export type AddTripBody = z.infer<typeof TripSchema>;
+export type AddTripBody = z.infer<typeof addTripSchema>;
 
 // regexで文字列のパターンを判定
 // 今回のbudget:
