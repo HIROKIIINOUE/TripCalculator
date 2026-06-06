@@ -5,12 +5,14 @@ import { initReactI18next } from "react-i18next";
 import { SUPPORTED_LANGUAGES, type LanguageKey } from "../types/language.type";
 import { commonTranslations } from "../locales/common";
 import { authTranslations } from "../locales/auth";
+import { homeTranslations } from "../locales/home";
 
 // reduceは配列を 1 つの値に畳み込むためのメソッド。今回は一つのオブジェクトを作成している。
 const resources = SUPPORTED_LANGUAGES.reduce((acc, lang) => {
   acc[lang] = {
     common: commonTranslations[lang],
     auth: authTranslations[lang],
+    home: homeTranslations[lang],
   };
   return acc;
 }, {} as Resource);
@@ -24,7 +26,7 @@ if (!i18n.isInitialized) {
       fallbackLng: "en",
       supportedLngs: SUPPORTED_LANGUAGES,
       defaultNS: "common", // common内の翻訳の記載はnamespaceを書かずに省略できる
-      ns: ["common", "auth"],
+      ns: ["common", "auth", "home"],
       detection: {
         order: ["localStorage", "navigator"], // 読み取り順「1,ローカル、2,ブラウザ言語」
         caches: ["localStorage"], // キャッシュはローカル保存
