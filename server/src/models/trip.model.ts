@@ -16,6 +16,7 @@ const add = async (userId: number, data: CreateTripBody) => {
     data: {
       userId,
       ...data,
+      startDay: new Date(data.startDay),
     },
   });
   return newTrip;

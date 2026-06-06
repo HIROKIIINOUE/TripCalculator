@@ -15,11 +15,7 @@ const TripCard = (props: Props) => {
   const { trip, selectedTripIds, setSelectedTripIds } = props
   const isSelected = selectedTripIds.includes(trip.id)
   // 後で修正
-  const formattedDate = trip.startDay.toLocaleDateString("ja-JP", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  })
+  const formattedDate = trip.startDay.includes("T") ? trip.startDay.split("T")[0] : trip.startDay
 
   const handleSelect = () => {
     if (isSelected) {
