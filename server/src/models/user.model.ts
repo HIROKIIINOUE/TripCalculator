@@ -18,7 +18,9 @@ const fetchById = async (id: number) => {
 };
 
 // Create new user
-const add = async (data: Omit<User, "id" | "hashedRefreshToken">) => {
+const add = async (
+  data: Omit<User, "id" | "hashedRefreshToken" | "createdAt" | "updatedAt">,
+) => {
   const { email, password } = data;
 
   const existUser = await prisma.user.findUnique({
