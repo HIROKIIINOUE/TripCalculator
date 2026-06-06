@@ -14,17 +14,36 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
-  displayName  String
+  displayName  String @map("display_name")
   email  String @unique
   language Language @default(en)
   password  String
-  hashedRefreshToken String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  hashedRefreshToken String? @map("hashed_refresh_token")
+  defaultYourCurrency String? @map("default_your_currency")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  trips Trip[]
+
+  @@map("users")
 }
 
 enum Language {
   en
   ja
   fr
+}
+
+model Trip {
+  id Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  title String
+  startDay DateTime @map("start_day")
+  budget Int
+  yourCurrency String @map("your_currency")
+  defaultLocalCurrency String? @map("default_local_currency")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("trips")
 }
