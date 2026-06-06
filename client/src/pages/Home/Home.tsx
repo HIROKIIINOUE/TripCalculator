@@ -1,35 +1,45 @@
 import type { Trip } from "../../types/trip.type"
 import TripList from "./components/TripList"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TripOperationButton from "./components/TripOperationButton"
 import TripInputModal from "./components/TripInputModal"
-const dummyTrips: Trip[] = [
-  {
-    id: 1,
-    title: "Autumn in Vancouver",
-    startDay: new Date("2026-10-12"),
-    budget: 1800,
-    yourCurrency: "JPY",
-  },
-  {
-    id: 2,
-    title: "Tokyo Food Weekend",
-    startDay: new Date("2026-08-03"),
-    budget: 950,
-    yourCurrency: "JPY",
-  },
-  {
-    id: 3,
-    title: "Rocky Mountains Escape",
-    startDay: new Date("2026-11-18"),
-    budget: 2600,
-    yourCurrency: "JPY",
-  },
-]
+import { useAuth } from "../../contexts/auth/useAuth"
+import toast from "react-hot-toast"
+import { useTranslation } from "react-i18next"
+
 
 const Home = () => {
+  const [trips, setTrips] = useState<Trip[]>([])
   const [selectedTripIds, setSelectedTripIds] = useState<number[]>([])
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
+  const { accessToken } = useAuth()
+  const { t } = useTranslation("home")
+
+  useEffect(() => {
+    const getTrips = async () => {
+      if (!accessToken) return;
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL_DEV}/trips`, {
+          method: "GET",
+          headers: {
+            "authorization": `Bearer ${accessToken}`
+          }
+        })
+        if (res.ok) {
+          const data = await res.json()
+          setTrips(data)
+        } else {
+          setTrips([])
+          toast.error(t("home.fetchFailed"))
+        }
+      } catch (error) {
+        console.error(error)
+        toast.error(t("home.networkError"))
+      }
+    }
+    getTrips()
+
+  }, [accessToken])
 
 
   return (
@@ -39,7 +49,7 @@ const Home = () => {
         <div className="flex justify-end">
           <TripOperationButton selectedTripIds={selectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
         </div>
-        <TripList trips={dummyTrips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
+        <TripList trips={trips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
       </div>
     </div>
   )
