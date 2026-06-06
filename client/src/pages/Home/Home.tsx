@@ -6,6 +6,7 @@ import TripInputModal from "./components/TripInputModal"
 import { useAuth } from "../../contexts/auth/useAuth"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+import Loading from "../Loading"
 
 
 const Home = () => {
@@ -14,12 +15,15 @@ const Home = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
   const { accessToken } = useAuth()
   const { t } = useTranslation("home")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const getTrips = async () => {
       if (!accessToken) return;
+      setIsLoading(true)
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL_DEV}/trips`, {
+        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+        const res = await fetch(`${BACKEND_URL}/trips`, {
           method: "GET",
           headers: {
             "authorization": `Bearer ${accessToken}`
@@ -35,16 +39,21 @@ const Home = () => {
       } catch (error) {
         console.error(error)
         toast.error(t("home.networkError"))
+      } finally {
+        setIsLoading(false)
       }
     }
     getTrips()
 
   }, [accessToken])
 
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <div className="min-h-full px-4 py-6 sm:px-6 sm:py-8">
-      {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} />}
+      {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} setTrips={setTrips} />}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <div className="flex justify-end">
           <TripOperationButton selectedTripIds={selectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
