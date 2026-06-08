@@ -39,10 +39,11 @@ const addEvent = async (req: Request, res: Response) => {
     res.status(400).json({ message: "this trip ID is invalid" });
     return;
   }
-  const { date, detail, localCurrency, priceLocalCurrency, priceYourCurrency } = parsed.data;
+  const { date, title, detail, localCurrency, priceLocalCurrency, priceYourCurrency } = parsed.data;
   try {
     const newEvent = await eventModel.add(Number(userId), Number(tripId), {
       date,
+      title,
       detail,
       localCurrency,
       priceLocalCurrency,

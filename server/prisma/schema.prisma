@@ -54,6 +54,7 @@ model Event {
   id Int @id @default(autoincrement())
   tripId Int @map("trip_id")
   date DateTime
+  title String
   detail String
   localCurrency String @map("local_currency")
   priceLocalCurrency Int @map("price_local_currency")
