@@ -56,7 +56,7 @@ const Home = () => {
       {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} setTrips={setTrips} />}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <div className="flex justify-end">
-          <TripOperationButton selectedTripIds={selectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
+          <TripOperationButton trips={trips} setTrips={setTrips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
         </div>
         <TripList trips={trips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
       </div>

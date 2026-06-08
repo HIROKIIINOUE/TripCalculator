@@ -3,6 +3,14 @@ export const homeTranslations = {
     home: {
       fetchFailed: "Failed to load trip data.",
       networkError: "Connection failed. Please check your network status.",
+      operation: {
+        addTrip: "Add Trip",
+        deleteTrip: "Delete Trip",
+        deleteConfirm: "Do you want to delete the selected trips?",
+        deleteSuccess: "Selected trips deleted.",
+        deletePartialFailure: "Failed to delete some trip data.",
+        deleteFailure: "Failed to delete trip data.",
+      },
       modal: {
         addFailed: "Failed to add trip data.",
         serverError: "Server error.",
@@ -34,6 +42,14 @@ export const homeTranslations = {
     home: {
       fetchFailed: "旅行データの取得に失敗しました",
       networkError: "通信接続に失敗しました。ネットワーク状況をお確かめください",
+      operation: {
+        addTrip: "旅行を追加",
+        deleteTrip: "旅行を削除",
+        deleteConfirm: "選択されたデータを削除しますか？",
+        deleteSuccess: "選択された旅行を削除しました。",
+        deletePartialFailure: "一部データの削除に失敗しました",
+        deleteFailure: "データの削除に失敗しました",
+      },
       modal: {
         addFailed: "旅行データの追加に失敗しました",
         serverError: "サーバーエラー",
@@ -65,6 +81,14 @@ export const homeTranslations = {
     home: {
       fetchFailed: "Echec du chargement des donnees de voyage.",
       networkError: "La connexion a echoue. Veuillez verifier votre reseau.",
+      operation: {
+        addTrip: "Ajouter un voyage",
+        deleteTrip: "Supprimer le voyage",
+        deleteConfirm: "Voulez-vous supprimer les voyages selectionnes ?",
+        deleteSuccess: "Voyages selectionnes supprimes.",
+        deletePartialFailure: "Echec de la suppression de certaines donnees de voyage.",
+        deleteFailure: "Echec de la suppression des donnees de voyage.",
+      },
       modal: {
         addFailed: "Echec de l'ajout des donnees de voyage.",
         serverError: "Erreur du serveur.",
