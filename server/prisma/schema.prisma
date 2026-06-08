@@ -44,6 +44,23 @@ model Trip {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events Event[]
+
   @@index([userId])
   @@map("trips")
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+  tripId Int @map("trip_id")
+  date DateTime
+  detail String
+  localCurrency String @map("local_currency")
+  priceLocalCurrency String @map("price_local_currency")
+  priceYourCurrency String 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  @@index([tripId])
+  @@map("events")
 }

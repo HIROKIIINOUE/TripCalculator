@@ -4,6 +4,7 @@ import userRouter from "./routes/user.route";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import tripRouter from "./routes/trip.route";
+import eventRouter from "./routes/event.route";
 dotenv.config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
 
 app.use("/users", userRouter);
 app.use("/trips", tripRouter);
+app.use("/events", eventRouter);
 
 app.use((req, res) => {
   res.status(404).send("Invalid Page");
