@@ -17,6 +17,31 @@ const getAllTrip = async (req: Request, res: Response) => {
   }
 };
 
+const getUniqueTrip = async (req: Request, res: Response) => {
+  const userId = req.userId;
+  const { id } = req.params;
+  // Numberに変換したtripIdが自然数かどうかを確認する。
+  if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
+    res.status(400).json({ message: "this trip ID is invalid" });
+    return;
+  }
+
+  try {
+    const trip = await tripModel.getUnique(Number(userId), Number(id));
+    if (!trip) {
+      res.status(404).json({ message: "The trip is not found" });
+      return;
+    }
+    res.status(200).json(trip);
+  } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 const addTrip = async (req: Request, res: Response) => {
   const userId = req.userId;
   const parsed = createTripSchema.safeParse(req.body);
@@ -108,6 +133,7 @@ const updateTrip = async (req: Request, res: Response) => {
 
 export default {
   getAllTrip,
+  getUniqueTrip,
   addTrip,
   deleteTrip,
   updateTrip,

@@ -11,6 +11,16 @@ const getAll = async (userId: number) => {
   return allTrips;
 };
 
+const getUnique = async (userId: number, tripId: number) => {
+  const trip = await prisma.trip.findUnique({
+    where: { id: tripId, userId },
+  });
+  if (!trip) {
+    return null;
+  }
+  return trip;
+};
+
 const add = async (userId: number, data: CreateTripBody) => {
   const newTrip = await prisma.trip.create({
     data: {
@@ -50,6 +60,7 @@ const update = async (userId: number, tripId: number, data: UpdateTripBody) => {
 
 export default {
   getAll,
+  getUnique,
   add,
   remove,
   update,
