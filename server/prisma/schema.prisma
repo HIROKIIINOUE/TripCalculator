@@ -56,8 +56,8 @@ model Event {
   date DateTime
   detail String
   localCurrency String @map("local_currency")
-  priceLocalCurrency String @map("price_local_currency")
-  priceYourCurrency String 
+  priceLocalCurrency Int @map("price_local_currency")
+  priceYourCurrency Int @map("price_your_currency")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
