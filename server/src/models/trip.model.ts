@@ -5,7 +5,7 @@ const getAll = async (userId: number) => {
   const allTrips = await prisma.trip.findMany({
     where: { userId },
     orderBy: {
-      createdAt: "desc", // 新しい順に返す
+      startDay: "desc", // 新しい順に返す
     },
   });
   return allTrips;

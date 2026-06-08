@@ -53,12 +53,12 @@ const Home = () => {
 
   return (
     <div className="min-h-full px-4 py-6 sm:px-6 sm:py-8">
-      {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} setTrips={setTrips} />}
+      {isAddModalOpen && <TripInputModal setIsAddModalOpen={setIsAddModalOpen} isAddModalOpen={isAddModalOpen} setTrips={setTrips} />}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <div className="flex justify-end">
           <TripOperationButton trips={trips} setTrips={setTrips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} setIsAddModalOpen={setIsAddModalOpen} />
         </div>
-        <TripList trips={trips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
+        <TripList setTrips={setTrips} trips={trips} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
       </div>
     </div>
   )

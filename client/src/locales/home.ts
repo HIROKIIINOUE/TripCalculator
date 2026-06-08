@@ -12,12 +12,18 @@ export const homeTranslations = {
         deleteFailure: "Failed to delete trip data.",
       },
       modal: {
+        addHeading: "Add a Trip",
+        editHeading: "Edit Trip",
         addFailed: "Failed to add trip data.",
+        updateFailed: "Failed to update trip data.",
+        notFound: "Trip data not found.",
         serverError: "Server error.",
         addSuccess: "Trip added.",
+        updateSuccess: "Trip updated.",
         titlePlaceholder: "Trip title",
         budgetPlaceholder: "Budget",
         submit: "Add",
+        update: "Update",
         cancel: "Cancel",
         errors: {
           title: {
@@ -51,12 +57,18 @@ export const homeTranslations = {
         deleteFailure: "データの削除に失敗しました",
       },
       modal: {
+        addHeading: "旅行を追加する",
+        editHeading: "旅行を編集する",
         addFailed: "旅行データの追加に失敗しました",
+        updateFailed: "旅行データの更新に失敗しました",
+        notFound: "旅行データが見つかりません",
         serverError: "サーバーエラー",
         addSuccess: "追加しました",
+        updateSuccess: "更新しました",
         titlePlaceholder: "旅行タイトル",
         budgetPlaceholder: "予算",
         submit: "追加",
+        update: "更新",
         cancel: "キャンセル",
         errors: {
           title: {
@@ -90,12 +102,18 @@ export const homeTranslations = {
         deleteFailure: "Echec de la suppression des donnees de voyage.",
       },
       modal: {
+        addHeading: "Ajouter un voyage",
+        editHeading: "Modifier le voyage",
         addFailed: "Echec de l'ajout des donnees de voyage.",
+        updateFailed: "Echec de la mise a jour des donnees de voyage.",
+        notFound: "Donnees de voyage introuvables.",
         serverError: "Erreur du serveur.",
         addSuccess: "Ajout reussi.",
+        updateSuccess: "Mise a jour reussie.",
         titlePlaceholder: "Titre du voyage",
         budgetPlaceholder: "Budget",
         submit: "Ajouter",
+        update: "Mettre a jour",
         cancel: "Annuler",
         errors: {
           title: {

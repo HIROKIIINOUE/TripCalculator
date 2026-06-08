@@ -2,13 +2,14 @@ import type { Trip } from "../../../types/trip.type"
 import TripCard from "./TripCard"
 
 type Props = {
+  setTrips: React.Dispatch<React.SetStateAction<Trip[]>>
   trips: Trip[]
   selectedTripIds: number[]
   setSelectedTripIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 const TripList = (props: Props) => {
-  const { trips, selectedTripIds, setSelectedTripIds } = props
+  const { setTrips, trips, selectedTripIds, setSelectedTripIds } = props
   if (trips.length <= 0) {
     return (
       <div className="rounded-3xl border border-dashed border-orange-200 bg-white px-6 py-12 text-center shadow-sm">
@@ -25,7 +26,7 @@ const TripList = (props: Props) => {
   return (
     <div className="grid gap-3">
       {trips.map((trip) => (
-        <TripCard key={trip.id} trip={trip} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
+        <TripCard key={trip.id} setTrips={setTrips} trip={trip} selectedTripIds={selectedTripIds} setSelectedTripIds={setSelectedTripIds} />
       ))}
     </div>
   )
