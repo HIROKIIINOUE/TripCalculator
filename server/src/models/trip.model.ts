@@ -40,7 +40,10 @@ const update = async (userId: number, tripId: number, data: UpdateTripBody) => {
   if (!targetTrip) return null;
   const updatedTrip = await prisma.trip.update({
     where: { id: tripId },
-    data: data,
+    data: {
+      ...data,
+      startDay: data.startDay ? new Date(data.startDay) : undefined, // undefinedの場合はDBを更新しない
+    },
   });
   return updatedTrip;
 };
