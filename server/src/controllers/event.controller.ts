@@ -5,6 +5,7 @@ import { createEventSchema, updateEventSchema } from "../schemas/event.schema";
 import {
   createEventWithConvertedPrice,
   getEventExchangeRatePreview,
+  updateEventWithConvertedPrice,
 } from "../services/event.service";
 
 const getAllEvent = async (req: Request, res: Response) => {
@@ -149,7 +150,7 @@ const updateEvent = async (req: Request, res: Response) => {
     return;
   }
   try {
-    const updatedEvent = await eventModel.update(
+    const updatedEvent = await updateEventWithConvertedPrice(
       Number(userId),
       Number(id),
       data,

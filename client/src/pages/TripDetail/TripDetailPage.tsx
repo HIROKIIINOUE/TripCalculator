@@ -95,6 +95,7 @@ const TripDetailPage = () => {
         <EventInputModal
           trip={trip}
           setIsAddModalOpen={setIsAddModalOpen}
+          isAddModalOpen={isAddModalOpen}
           setEvents={setEvents}
         />
       )}
@@ -112,6 +113,7 @@ const TripDetailPage = () => {
         <EventList
           trip={trip}
           events={events}
+          setEvents={setEvents}
           selectedEventIds={selectedEventIds}
           setSelectedEventIds={setSelectedEventIds}
         />

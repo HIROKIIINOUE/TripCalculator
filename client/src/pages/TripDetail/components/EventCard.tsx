@@ -2,6 +2,7 @@ import { useState } from "react"
 import { FaRegEdit } from "react-icons/fa"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
 import EventDetail from "./EventDetail"
+import EventInputModal from "./EventInputModal"
 import type { TripDetailEvent } from "../../../types/event.type"
 import type { Trip } from "../../../types/trip.type"
 
@@ -9,14 +10,16 @@ import type { Trip } from "../../../types/trip.type"
 type Props = {
   trip: Trip
   event: TripDetailEvent
+  setEvents: React.Dispatch<React.SetStateAction<TripDetailEvent[]>>
   selectedEventIds: number[]
   setSelectedEventIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 const EventCard = (props: Props) => {
-  const { trip, event, selectedEventIds, setSelectedEventIds } = props
+  const { trip, event, setEvents, selectedEventIds, setSelectedEventIds } = props
   const isSelected = selectedEventIds.includes(event.id)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const formattedEventDay = event?.date.includes("T")
     ? event.date.split("T")[0]
     : event.date
@@ -33,6 +36,15 @@ const EventCard = (props: Props) => {
     <>
       {isDetailOpen ? (
         <EventDetail event={event} onClose={() => setIsDetailOpen(false)} />
+      ) : null}
+      {isUpdateModalOpen ? (
+        <EventInputModal
+          trip={trip}
+          event={event}
+          setEvents={setEvents}
+          setIsUpdateModalOpen={setIsUpdateModalOpen}
+          isUpdateModalOpen={isUpdateModalOpen}
+        />
       ) : null}
       <article
         className={`rounded-2xl border shadow-[0_14px_30px_-26px_rgba(120,53,15,0.45)] transition hover:shadow-[0_18px_36px_-24px_rgba(120,53,15,0.55)] ${isSelected
@@ -73,7 +85,7 @@ const EventCard = (props: Props) => {
           <div className="flex shrink-0 items-center justify-end gap-2 border-t border-orange-200 px-3 py-3 sm:border-l sm:border-t-0 sm:px-4 sm:py-0">
             <button
               type="button"
-              onClick={() => setIsDetailOpen(true)}
+              onClick={() => setIsUpdateModalOpen(true)}
               aria-label={`${event.title}を編集`}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700 0 sm:h-11 sm:w-11 cursor-pointer"
             >

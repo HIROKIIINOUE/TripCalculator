@@ -15,6 +15,19 @@ const getAll = async (userId: number, tripId: number) => {
   return allEvents;
 };
 
+const getById = async (userId: number, eventId: number) => {
+  const targetEvent = await prisma.event.findFirst({
+    where: {
+      id: eventId,
+      trip: {
+        userId,
+      },
+    },
+  });
+
+  return targetEvent;
+};
+
 // priceYourCurrencyとappliedExchangeRateはフロントから送られてくるデータではなくバックエンドで算出される値であるため型定義は以下のようにmodel内で拡張する形で定義している
 type AddEventInput = CreateEventBody & {
   priceYourCurrency: number;
@@ -90,6 +103,7 @@ const update = async (
 
 export default {
   getAll,
+  getById,
   add,
   getYourCurrency,
   remove,

@@ -2,7 +2,6 @@
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useEffect, useState } from "react";
 import CurrencyCombobox from "../../../components/CurrencyCombobox";
-import type { Trip } from "../../../types/trip.type";
 import type {
   EventInputForm,
   ExchangeRatePreview,
@@ -10,12 +9,18 @@ import type {
 } from "../../../types/event.type";
 import { useAuth } from "../../../contexts/auth/useAuth";
 import toast from "react-hot-toast";
+import type { Trip } from "../../../types/trip.type";
+
 
 type Props = {
-  trip: Trip;
-  setIsAddModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trip: Trip
   setEvents: React.Dispatch<React.SetStateAction<TripDetailEvent[]>>;
-};
+  event?: TripDetailEvent;
+  setIsAddModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddModalOpen?: boolean;
+  setIsUpdateModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  isUpdateModalOpen?: boolean;
+}
 
 const sortEventsByDateDesc = (events: TripDetailEvent[]) =>
   [...events].sort(
@@ -23,10 +28,21 @@ const sortEventsByDateDesc = (events: TripDetailEvent[]) =>
   );
 
 const EventInputModal = (props: Props) => {
-  const { trip, setIsAddModalOpen, setEvents } = props
+  const {
+    trip,
+    event,
+    setEvents,
+    setIsAddModalOpen,
+    isAddModalOpen,
+    setIsUpdateModalOpen,
+    isUpdateModalOpen,
+  } = props;
   const { accessToken } = useAuth();
   const [preview, setPreview] = useState<ExchangeRatePreview | null>(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const formattedDate = event?.date.includes("T")
+    ? event.date.split("T")[0]
+    : event?.date;
   const {
     register,
     handleSubmit,
@@ -34,25 +50,37 @@ const EventInputModal = (props: Props) => {
     formState: { errors, isValid, isSubmitting },
   } = useForm<EventInputForm>({
     mode: "onChange",
-    defaultValues: {
-      title: "",
-      date: "",
-      localCurrency: "",
-      priceLocalCurrency: "",
-      detail: "",
-    },
+    defaultValues: event
+      ? {
+        title: event.title,
+        date: formattedDate,
+        localCurrency: event.localCurrency,
+        priceLocalCurrency: String(event.priceLocalCurrency),
+        detail: event.detail,
+      }
+      : {
+        title: "",
+        date: "",
+        localCurrency: "",
+        priceLocalCurrency: "",
+        detail: "",
+      },
   });
   // useWatchでは指定したnameの値を監視し、定数として値を格納できる
   const localCurrency = useWatch({ control, name: "localCurrency" });
   const priceLocalCurrency = useWatch({ control, name: "priceLocalCurrency" });
-
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV;
 
-
   const closeModal = () => {
-    setIsAddModalOpen(false);
+    if (setIsAddModalOpen && isAddModalOpen) {
+      setIsAddModalOpen(false);
+    } else if (setIsUpdateModalOpen && isUpdateModalOpen) {
+      setIsUpdateModalOpen(false);
+    }
   };
 
+
+  // 通貨換算の計算とプレビュー表示に必要な「現地通貨」「自国通貨」「現地通貨と自国通貨のレート」をバックエンドから取得し、previewにセットする。換金は「現地通貨での料金 × 現地通貨と自国通貨のレート」で求められるようになる。
   useEffect(() => {
     if (!accessToken || !localCurrency) {
       setPreview(null);
@@ -89,7 +117,8 @@ const EventInputModal = (props: Props) => {
     };
 
     fetchPreview();
-  }, [accessToken, localCurrency, trip.id]);
+  }, [accessToken, BACKEND_URL, localCurrency, trip.id]);
+
 
   // ===プレビューに表示用の外貨計算ロジック(DBへ保存する際はバックエンドで別途計算する)===
   const parsedPrice = Number(priceLocalCurrency);
@@ -103,7 +132,8 @@ const EventInputModal = (props: Props) => {
   // ===================================
 
   // イベント追加ロジック
-  const handleAdd = async (data: EventInputForm) => {
+  const addEvent = async (data: EventInputForm) => {
+    if (!isAddModalOpen) return;
 
     try {
       const res = await fetch(`${BACKEND_URL}/events/${trip.id}`, {
@@ -129,7 +159,51 @@ const EventInputModal = (props: Props) => {
       const createdEvent = (await res.json()) as TripDetailEvent;
       setEvents((prev) => sortEventsByDateDesc([createdEvent, ...prev]));
       toast.success("イベントを追加しました");
-      closeModal();
+      if (setIsAddModalOpen) {
+        setIsAddModalOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("ネットワークエラー");
+    }
+  };
+
+  // イベント更新処理
+  const updateEvent = async (data: EventInputForm) => {
+    if (!isUpdateModalOpen || !event) return;
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/events/${event.id}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          title: data.title,
+          date: data.date,
+          localCurrency: data.localCurrency,
+          priceLocalCurrency: Number(data.priceLocalCurrency),
+          detail: data.detail,
+        }),
+      });
+
+      if (!res.ok) {
+        toast.error(res.status === 404 ? "イベントデータが見つかりません" : "サーバーエラー");
+        return;
+      }
+
+      const updatedEvent = (await res.json()) as TripDetailEvent;
+      setEvents((prev) =>
+        sortEventsByDateDesc([
+          updatedEvent,
+          ...prev.filter((currentEvent) => currentEvent.id !== event.id),
+        ]),
+      );
+      toast.success("イベントを更新しました");
+      if (setIsUpdateModalOpen) {
+        setIsUpdateModalOpen(false);
+      }
     } catch (error) {
       console.error(error);
       toast.error("ネットワークエラー");
@@ -144,11 +218,11 @@ const EventInputModal = (props: Props) => {
       ></div>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
         <form
-          onSubmit={handleSubmit(handleAdd)}
+          onSubmit={isAddModalOpen ? handleSubmit(addEvent) : handleSubmit(updateEvent)}
           className="w-full max-w-xl rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-5 shadow-[0_24px_80px_-28px_rgba(234,88,12,0.45)] sm:p-7"
         >
           <p className="mb-4 text-left text-lg font-bold text-stone-900 sm:text-xl">
-            イベントを追加する
+            {isAddModalOpen ? "イベントを追加する" : "イベントを編集する"}
           </p>
 
           <div className="space-y-1">
@@ -213,6 +287,7 @@ const EventInputModal = (props: Props) => {
               </p>
             </div>
           </div>
+
           <div className="rounded-2xl border border-orange-200 bg-orange-50/70 px-4 py-3 shadow-sm">
             <p className="text-sm font-semibold text-stone-900 sm:text-base">
               {isPreviewLoading
@@ -238,7 +313,7 @@ const EventInputModal = (props: Props) => {
               disabled={!isValid || isSubmitting}
               className="inline-flex cursor-pointer items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_-18px_rgba(249,115,22,0.9)] transition hover:bg-orange-600 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-black disabled:shadow-none sm:min-w-32 sm:text-base"
             >
-              追加
+              {isAddModalOpen ? "追加" : "更新"}
             </button>
             <button
               type="button"
