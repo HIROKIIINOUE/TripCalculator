@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "module": "commonjs",
+    "target": "es6",
+    "esModuleInterop": true
+  },
+  "include": ["./**/*.ts", "../src/generated/prisma/**/*.ts"]
+}
