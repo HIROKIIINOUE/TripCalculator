@@ -1,11 +1,16 @@
-import type { TripDetailEvent } from "../TripDetailPage"
+import type { TripDetailEvent } from "../../../types/event.type"
+
 
 type Props = {
   event: TripDetailEvent
   onClose: () => void
 }
 
-const EventDetail = ({ event, onClose }: Props) => {
+const EventDetail = (props: Props) => {
+  const { event, onClose } = props
+  const formattedEventDay = event?.date.includes("T")
+    ? event.date.split("T")[0]
+    : event.date
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-sm" />
@@ -16,7 +21,7 @@ const EventDetail = ({ event, onClose }: Props) => {
             <h3 className="text-xl font-semibold tracking-[0.2em] text-orange-500">
               {event.title}
             </h3>
-            <p className="text-sm font-semibold tracking-[0.2em]">({event.date})</p>
+            <p className="text-sm font-semibold tracking-[0.2em]">({formattedEventDay})</p>
           </div>
           <div className="mt-6 grid gap-3 ">
             <article className="rounded-3xl border border-orange-100 bg-white p-4 shadow-sm">
@@ -24,7 +29,7 @@ const EventDetail = ({ event, onClose }: Props) => {
                 現地通貨
               </p>
               <p className="mt-3 text-base font-bold text-stone-900">
-                {event.localAmount.toLocaleString()} {event.localCurrency}
+                {event.priceLocalCurrency.toLocaleString()} {event.localCurrency}
               </p>
             </article>
 

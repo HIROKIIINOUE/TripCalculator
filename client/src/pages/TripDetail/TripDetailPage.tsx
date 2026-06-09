@@ -1,86 +1,102 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IoMdAdd } from "react-icons/io"
 import { MdDeleteOutline } from "react-icons/md"
 import EventList from "./components/EventList"
 import TripSummary from "./components/TripSummary"
+import type { TripDetailEvent } from "../../types/event.type"
+import type { Trip } from "../../types/trip.type"
+import { Navigate, useParams } from "react-router"
+import { useAuth } from "../../contexts/auth/useAuth"
+import toast from "react-hot-toast"
+import Loading from "../Loading"
 
-export type TripDetailEvent = {
-  id: number
-  date: string
-  title: string
-  localAmount: number
-  localCurrency: string
-  yourAmount: number
-  yourCurrency: string
-  detail: string
-}
 
-export type TripDetailTrip = {
-  id: number
-  title: string
-  budget: number
-  yourCurrency: string
-}
 
-const mockTrip: TripDetailTrip = {
-  id: 1,
-  title: "秋のソウル食べ歩き旅行",
-  budget: 180000,
-  yourCurrency: "JPY",
-}
-
-const mockEvents: TripDetailEvent[] = [
-  {
-    id: 1,
-    date: "2026-10-12",
-    title: "ランチランチランチランチランチランチ",
-    localAmount: 18500000000000000000,
-    localCurrency: "KRW",
-    yourAmount: 203500000000000000,
-    yourCurrency: "JPY",
-    detail: "明洞のスンドゥブ専門店でランチ。熱々でかなり満足。",
-  },
-  {
-    id: 2,
-    date: "2026-10-12",
-    title: "カフェ",
-    localAmount: 7200,
-    localCurrency: "KRW",
-    yourAmount: 792,
-    yourCurrency: "JPY",
-    detail: "景福宮近くの韓屋カフェで休憩。抹茶ラテとケーキ。",
-  },
-  {
-    id: 3,
-    date: "2026-10-13",
-    title: "おみやげ",
-    localAmount: 42000,
-    localCurrency: "KRW",
-    yourAmount: 4620,
-    yourCurrency: "JPY",
-    detail: "家族向けに韓国のりとパック、職場向けにお菓子を購入。",
-  },
-  {
-    id: 4,
-    date: "2026-10-14",
-    title: "夕食",
-    localAmount: 36500,
-    localCurrency: "KRW",
-    yourAmount: 4015,
-    yourCurrency: "JPY",
-    detail: "東大門でサムギョプサル。追加注文までして少し使いすぎた。",
-  },
-]
 
 const TripDetailPage = () => {
-  const [events, setEvents] = useState<TripDetailEvent[]>(mockEvents)
+  const { tripId } = useParams()
+  const { accessToken } = useAuth()
+  const [events, setEvents] = useState<TripDetailEvent[]>([])
+  const [trip, setTrip] = useState<Trip | null>(null)
+  const [isTripNotFound, setIsTripNotFound] = useState<boolean>(false)
+  const [isNetworkError, setIsNetworkError] = useState<boolean>(false)
   const [selectedEventIds, setSelectedEventIds] = useState<number[]>([])
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+
+
+  // 該当の旅行情報と紐づくイベントデータの取得
+  useEffect(() => {
+    if (!accessToken) return;
+    const getTripAndEvents = async () => {
+      setIsLoading(true)
+      setIsTripNotFound(false)
+      setIsNetworkError(false)
+      try {
+        const resTrip = await fetch(`${BACKEND_URL}/trips/${tripId}`, {
+          method: "GET",
+          headers: {
+            "authorization": `Bearer ${accessToken}`
+          }
+        })
+        const resultTrip = await resTrip.json()
+        if (!resTrip.ok) {
+          if (resTrip.status === 404) {
+            toast.error("Trip is not found")
+            setIsTripNotFound(true)
+            return
+          }
+          toast.error("server error")
+          setIsTripNotFound(true)
+          return
+        }
+        if (!resultTrip) {
+          setIsTripNotFound(true)
+          return
+        } else {
+          setTrip(resultTrip)
+        }
+
+        const resEvent = await fetch(`${BACKEND_URL}/events/${resultTrip.id}`, {
+          method: "GET",
+          headers: {
+            "authorization": `Bearer ${accessToken}`
+          }
+        })
+        if (!resEvent.ok) {
+          if (resEvent.status === 404) {
+            toast.error("Events are not found")
+            return
+          }
+          toast.error("server error")
+          return
+        }
+        const resultEvent = await resEvent.json()
+        setEvents(resultEvent)
+
+      } catch (error) {
+        console.error(error)
+        toast.error("ネットワークエラー")
+        setIsNetworkError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    getTripAndEvents()
+
+  }, [tripId, accessToken])
+
 
   const handleDelete = () => {
     setEvents(prev => prev.filter(event => !selectedEventIds.includes(event.id)))
     setSelectedEventIds([])
   }
+
+
+  if (isLoading) return <Loading />
+  if (isTripNotFound || isNetworkError) return <Navigate to="/" replace />
+  if (!trip) return
 
   return (
     <div className="min-h-full px-4 py-6 sm:px-6 sm:py-8">
@@ -90,7 +106,7 @@ const TripDetailPage = () => {
         </>
       )}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
-        <TripSummary trip={mockTrip} events={events} />
+        <TripSummary trip={trip} events={events} />
         <div className="flex justify-end">
           {selectedEventIds.length > 0 ? (
             <button
@@ -113,6 +129,7 @@ const TripDetailPage = () => {
           )}
         </div>
         <EventList
+          trip={trip}
           events={events}
           selectedEventIds={selectedEventIds}
           setSelectedEventIds={setSelectedEventIds}

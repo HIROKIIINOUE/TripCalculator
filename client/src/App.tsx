@@ -8,10 +8,10 @@ import { Toaster } from 'react-hot-toast'
 import { useAuth } from './contexts/auth/useAuth'
 import { useEffect } from 'react'
 import Loading from './pages/Loading'
-import TripPage from './pages/TripDetail/TripDetailPage'
 import NotFound from './pages/NotFound'
 import GuestRoute from './router/GuestRoute'
 import ProtectedRoute from './router/ProtectedRoute'
+import TripDetailPage from './pages/TripDetail/TripDetailPage'
 
 function App() {
   const { accessToken, authStatus, checkUserAuthentication, restoreAccessToken } = useAuth()
@@ -62,7 +62,7 @@ function App() {
             />
             <Route
               path=":tripId"
-              element={<TripPage />}
+              element={<TripDetailPage />}
             />
           </Route>
           <Route path="*" element={<NotFound />} />

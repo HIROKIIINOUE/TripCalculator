@@ -2,17 +2,24 @@ import { useState } from "react"
 import { FaRegEdit } from "react-icons/fa"
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md"
 import EventDetail from "./EventDetail"
-import type { TripDetailEvent } from "../TripDetailPage"
+import type { TripDetailEvent } from "../../../types/event.type"
+import type { Trip } from "../../../types/trip.type"
+
 
 type Props = {
+  trip: Trip
   event: TripDetailEvent
   selectedEventIds: number[]
   setSelectedEventIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-const EventCard = ({ event, selectedEventIds, setSelectedEventIds }: Props) => {
+const EventCard = (props: Props) => {
+  const { trip, event, selectedEventIds, setSelectedEventIds } = props
   const isSelected = selectedEventIds.includes(event.id)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
+  const formattedEventDay = event?.date.includes("T")
+    ? event.date.split("T")[0]
+    : event.date
 
   const handleSelect = () => {
     if (isSelected) {
@@ -43,7 +50,7 @@ const EventCard = ({ event, selectedEventIds, setSelectedEventIds }: Props) => {
               <h3 className="text-md font-semibold tracking-[0.2em] text-orange-500">
                 {event.title}
               </h3>
-              <p className="text-sm font-semibold tracking-[0.2em]">({event.date})</p>
+              <p className="text-sm font-semibold tracking-[0.2em]">({formattedEventDay})</p>
             </div>
 
             <div className="grid gap-1 text-xs text-stone-600 sm:grid-cols-2 sm:text-sm">
@@ -51,13 +58,13 @@ const EventCard = ({ event, selectedEventIds, setSelectedEventIds }: Props) => {
               <p className="min-w-0 break-words">
                 <span className="mr-2 font-medium text-stone-500">現地通貨</span>
                 <span className="font-semibold text-stone-900">
-                  {event.localAmount.toLocaleString()} {event.localCurrency}
+                  {event.priceLocalCurrency.toLocaleString()} {event.localCurrency}
                 </span>
               </p>
               <p className="min-w-0 break-words">
                 <span className="mr-2 font-medium text-stone-500">自国通貨</span>
                 <span className="font-semibold text-stone-900">
-                  {event.yourAmount.toLocaleString()} {event.yourCurrency}
+                  {event.priceYourCurrency.toLocaleString()} {trip.yourCurrency}
                 </span>
               </p>
             </div>

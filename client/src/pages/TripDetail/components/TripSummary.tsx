@@ -1,13 +1,16 @@
-import type { TripDetailEvent, TripDetailTrip } from "../TripDetailPage"
+import type { TripDetailEvent } from "../../../types/event.type"
+import type { Trip } from "../../../types/trip.type"
+
 
 type Props = {
-  trip: TripDetailTrip
+  trip: Trip
   events: TripDetailEvent[]
 }
 
-const TripSummary = ({ trip, events }: Props) => {
-  const totalYourAmount = events.reduce((sum, event) => sum + event.yourAmount, 0)
-  const totalLocalAmount = events.reduce((sum, event) => sum + event.localAmount, 0)
+const TripSummary = (props: Props) => {
+  const { trip, events } = props
+  const totalYourAmount = events.reduce((sum, event) => sum + event.priceYourCurrency, 0)
+  const totalLocalAmount = events.reduce((sum, event) => sum + event.priceLocalCurrency, 0)
   const difference = trip.budget - totalYourAmount
 
   const compactSummaryItems = [

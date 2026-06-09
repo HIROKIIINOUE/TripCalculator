@@ -1,13 +1,16 @@
+import type { TripDetailEvent } from "../../../types/event.type"
+import type { Trip } from "../../../types/trip.type"
 import EventCard from "./EventCard"
-import type { TripDetailEvent } from "../TripDetailPage"
 
 type Props = {
+  trip: Trip
   events: TripDetailEvent[]
   selectedEventIds: number[]
   setSelectedEventIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-const EventList = ({ events, selectedEventIds, setSelectedEventIds }: Props) => {
+const EventList = (props: Props) => {
+  const { trip, events, selectedEventIds, setSelectedEventIds } = props
   if (events.length <= 0) {
     return (
       <div className="rounded-3xl border border-dashed border-orange-200 bg-white px-6 py-12 text-center shadow-sm">
@@ -26,6 +29,7 @@ const EventList = ({ events, selectedEventIds, setSelectedEventIds }: Props) => 
       {events.map((event) => (
         <EventCard
           key={event.id}
+          trip={trip}
           event={event}
           selectedEventIds={selectedEventIds}
           setSelectedEventIds={setSelectedEventIds}
