@@ -10,9 +10,6 @@ import { useAuth } from "../../contexts/auth/useAuth"
 import toast from "react-hot-toast"
 import Loading from "../Loading"
 
-
-
-
 const TripDetailPage = () => {
   const { tripId } = useParams()
   const { accessToken } = useAuth()
