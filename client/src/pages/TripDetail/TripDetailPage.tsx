@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
-import { IoMdAdd } from "react-icons/io"
-import { MdDeleteOutline } from "react-icons/md"
 import EventList from "./components/EventList"
+import EventOperationButton from "./components/EventOperationButton"
 import TripSummary from "./components/TripSummary"
 import type { TripDetailEvent } from "../../types/event.type"
 import type { Trip } from "../../types/trip.type"
@@ -85,12 +84,6 @@ const TripDetailPage = () => {
   }, [tripId, accessToken])
 
 
-  const handleDelete = () => {
-    setEvents(prev => prev.filter(event => !selectedEventIds.includes(event.id)))
-    setSelectedEventIds([])
-  }
-
-
   if (isLoading) return <Loading />
   if (isTripNotFound || isNetworkError) return <Navigate to="/" replace />
   if (!trip) return
@@ -105,25 +98,13 @@ const TripDetailPage = () => {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <TripSummary trip={trip} events={events} />
         <div className="flex justify-end">
-          {selectedEventIds.length > 0 ? (
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-red-200 bg-orange-800 px-5 py-2 text-sm font-bold text-white shadow-[0_18px_34px_-18px_rgba(220,38,38,0.95)] transition hover:scale-[1.03] cursor-pointer"
-            >
-              <MdDeleteOutline className="text-lg" />
-              Delete Event
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_14px_30px_-18px_rgba(249,115,22,0.95)] transition hover:scale-[1.03] hover:bg-orange-600 cursor-pointer"
-            >
-              <IoMdAdd className="text-lg" />
-              Add Event
-            </button>
-          )}
+          <EventOperationButton
+            events={events}
+            setEvents={setEvents}
+            selectedEventIds={selectedEventIds}
+            setSelectedEventIds={setSelectedEventIds}
+            setIsAddModalOpen={setIsAddModalOpen}
+          />
         </div>
         <EventList
           trip={trip}
