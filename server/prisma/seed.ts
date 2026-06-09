@@ -88,6 +88,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 3070,
     priceYourCurrency: 3070,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-10T19:00:00.000Z"),
@@ -96,6 +97,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 36000,
     priceYourCurrency: 36000,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-11T01:00:00.000Z"),
@@ -104,6 +106,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 2800,
     priceYourCurrency: 2800,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-11T05:00:00.000Z"),
@@ -112,6 +115,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 1500,
     priceYourCurrency: 1500,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-11T09:00:00.000Z"),
@@ -120,6 +124,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 4200,
     priceYourCurrency: 4200,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-12T03:00:00.000Z"),
@@ -128,6 +133,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 2400,
     priceYourCurrency: 2400,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-12T11:00:00.000Z"),
@@ -136,6 +142,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 3100,
     priceYourCurrency: 3100,
+    appliedExchangeRate: 1,
   },
   {
     date: new Date("2026-07-13T01:00:00.000Z"),
@@ -144,6 +151,7 @@ const firstTripEvents = [
     localCurrency: "JPY",
     priceLocalCurrency: 3600,
     priceYourCurrency: 3600,
+    appliedExchangeRate: 1,
   },
 ];
 
