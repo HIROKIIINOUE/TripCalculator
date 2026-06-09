@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import eventModel from "../models/event.model";
 import { handlePrismaUserError } from "../lib/prisma.errors";
 import { createEventSchema, updateEventSchema } from "../schemas/event.schema";
+import { createEventWithConvertedPrice } from "../services/event.service";
 
 const getAllEvent = async (req: Request, res: Response) => {
   const userId = req.userId;
@@ -39,25 +40,19 @@ const addEvent = async (req: Request, res: Response) => {
     res.status(400).json({ message: "this trip ID is invalid" });
     return;
   }
-  const {
-    date,
-    title,
-    detail,
-    localCurrency,
-    priceLocalCurrency,
-    priceYourCurrency,
-    appliedExchangeRate,
-  } = parsed.data;
+  const { date, title, detail, localCurrency, priceLocalCurrency } = parsed.data;
   try {
-    const newEvent = await eventModel.add(Number(userId), Number(tripId), {
+    const newEvent = await createEventWithConvertedPrice(
+      Number(userId),
+      Number(tripId),
+      {
       date,
       title,
       detail,
       localCurrency,
       priceLocalCurrency,
-      priceYourCurrency,
-      appliedExchangeRate,
-    });
+      },
+    );
     if (!newEvent) {
       res.status(400).json({ message: "Failed to add event" });
       return;

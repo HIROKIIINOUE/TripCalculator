@@ -15,7 +15,13 @@ const getAll = async (userId: number, tripId: number) => {
   return allEvents;
 };
 
-const add = async (userId: number, tripId: number, data: CreateEventBody) => {
+// priceYourCurrencyとappliedExchangeRateはフロントから送られてくるデータではなくバックエンドで算出される値であるため型定義は以下のようにmodel内で拡張する形で定義している
+type AddEventInput = CreateEventBody & {
+  priceYourCurrency: number;
+  appliedExchangeRate: number;
+};
+
+const add = async (userId: number, tripId: number, data: AddEventInput) => {
   const targetTrip = await prisma.trip.findFirst({
     where: { id: tripId, userId },
   });
@@ -28,6 +34,18 @@ const add = async (userId: number, tripId: number, data: CreateEventBody) => {
     },
   });
   return newEvent;
+};
+
+// tripsテーブルからテーブルからユーザの自国通貨データを取得
+const getYourCurrency = async (userId: number, tripId: number) => {
+  const targetTrip = await prisma.trip.findFirst({
+    where: { id: tripId, userId },
+    select: {
+      yourCurrency: true,
+    },
+  });
+
+  return targetTrip;
 };
 
 const remove = async (userId: number, eventId: number) => {
@@ -46,7 +64,11 @@ const remove = async (userId: number, eventId: number) => {
   return deletedEvent;
 };
 
-const update = async (userId: number, eventId: number, data: UpdateEventBody) => {
+const update = async (
+  userId: number,
+  eventId: number,
+  data: UpdateEventBody,
+) => {
   const targetEvent = await prisma.event.findFirst({
     where: {
       id: eventId,
@@ -69,6 +91,7 @@ const update = async (userId: number, eventId: number, data: UpdateEventBody) =>
 export default {
   getAll,
   add,
+  getYourCurrency,
   remove,
   update,
 };

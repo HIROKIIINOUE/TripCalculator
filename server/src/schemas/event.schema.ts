@@ -6,8 +6,6 @@ export const createEventSchema = z.object({
   detail: z.string().min(1),
   localCurrency: z.string().min(1),
   priceLocalCurrency: z.number().int(),
-  priceYourCurrency: z.number().int(),
-  appliedExchangeRate: z.number().positive(),
 });
 
 export type CreateEventBody = z.infer<typeof createEventSchema>;
