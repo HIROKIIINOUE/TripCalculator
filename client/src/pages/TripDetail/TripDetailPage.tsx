@@ -8,6 +8,7 @@ import { Navigate, useParams } from "react-router"
 import { useAuth } from "../../contexts/auth/useAuth"
 import toast from "react-hot-toast"
 import Loading from "../Loading"
+import EventInputModal from "./components/EventInputModal"
 
 const TripDetailPage = () => {
   const { tripId } = useParams()
@@ -91,9 +92,10 @@ const TripDetailPage = () => {
   return (
     <div className="min-h-full px-4 py-6 sm:px-6 sm:py-8">
       {isAddModalOpen && (
-        <>
-          {/* ここに追加インプットモーダルコンポーネント作成 */}
-        </>
+        <EventInputModal
+          trip={trip}
+          setIsAddModalOpen={setIsAddModalOpen}
+        />
       )}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
         <TripSummary trip={trip} events={events} />

@@ -11,7 +11,7 @@ import { FaCheck, FaChevronDown, FaMagnifyingGlass } from "react-icons/fa6";
 import {
   getLocalizedCurrencyOptions,
   type CurrencyDefinition,
-} from "../../../constants/currencies";
+} from "../constants/currencies";
 
 type Props = {
   value: string;
@@ -29,8 +29,8 @@ const CurrencyCombobox = ({ value, onChange }: Props) => {
     query.trim() === ""
       ? options
       : options.filter((option) =>
-          option.searchText.includes(query.trim().toLowerCase()),
-        );
+        option.searchText.includes(query.trim().toLowerCase()),
+      );
 
   const handleChange = (option: CurrencyDefinition | null) => {
     if (!option) {
@@ -42,7 +42,7 @@ const CurrencyCombobox = ({ value, onChange }: Props) => {
   };
 
   return (
-    <Combobox value={selectedOption} onChange={handleChange} nullable>
+    <Combobox value={selectedOption} onChange={handleChange} >
       <div className="relative">
         <div className="relative overflow-hidden rounded-2xl border border-orange-200 bg-white/90 shadow-sm transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
@@ -63,6 +63,7 @@ const CurrencyCombobox = ({ value, onChange }: Props) => {
             }}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Select currency"
+            autoComplete="off"
             className="w-full border-none bg-transparent py-3 pl-11 pr-12 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400 sm:text-base"
           />
           <ComboboxButton className="absolute inset-y-0 right-0 flex items-center px-4 text-orange-400 transition hover:text-orange-500">

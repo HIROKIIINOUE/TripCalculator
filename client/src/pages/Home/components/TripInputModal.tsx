@@ -1,7 +1,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addTripSchema, type AddTripBody } from "../../../schemas/tripPage.schema";
-import CurrencyCombobox from "./CurrencyCombobox";
+import CurrencyCombobox from "../../../components/CurrencyCombobox";
 import { useAuth } from "../../../contexts/auth/useAuth";
 import toast from "react-hot-toast";
 import type { Trip } from "../../../types/trip.type";
