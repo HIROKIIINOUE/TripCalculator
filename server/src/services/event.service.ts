@@ -23,10 +23,7 @@ const createEventWithConvertedPrice = async (
     return null;
   }
 
-  const { rate } = await getExchangeRate(
-    data.localCurrency,
-    yourCurrency.yourCurrency,
-  );
+  const { rate } = await getExchangeRate(data.localCurrency, yourCurrency);
 
   const newEvent = await eventModel.add(userId, tripId, {
     ...data,
@@ -40,4 +37,29 @@ const createEventWithConvertedPrice = async (
   return newEvent;
 };
 
-export { calculateYourCurrencyPrice, createEventWithConvertedPrice };
+// 「ローカル通貨」「ユーザ自国通貨」「換算に使う２通貨間の比率」を返す
+const getEventExchangeRatePreview = async (
+  userId: number,
+  tripId: number,
+  localCurrency: string,
+) => {
+  const yourCurrency = await eventModel.getYourCurrency(userId, tripId);
+
+  if (!yourCurrency) {
+    return null;
+  }
+
+  const exchangeRateResult = await getExchangeRate(localCurrency, yourCurrency);
+
+  return {
+    localCurrency: exchangeRateResult.baseCurrency,
+    yourCurrency: exchangeRateResult.targetCurrency,
+    appliedExchangeRate: exchangeRateResult.rate,
+  };
+};
+
+export {
+  calculateYourCurrencyPrice,
+  createEventWithConvertedPrice,
+  getEventExchangeRatePreview,
+};

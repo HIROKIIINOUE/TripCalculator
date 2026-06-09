@@ -45,7 +45,7 @@ const getYourCurrency = async (userId: number, tripId: number) => {
     },
   });
 
-  return targetTrip;
+  return targetTrip?.yourCurrency;
 };
 
 const remove = async (userId: number, eventId: number) => {

@@ -95,6 +95,7 @@ const TripDetailPage = () => {
         <EventInputModal
           trip={trip}
           setIsAddModalOpen={setIsAddModalOpen}
+          setEvents={setEvents}
         />
       )}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">

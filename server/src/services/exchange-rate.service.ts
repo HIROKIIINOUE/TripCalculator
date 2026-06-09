@@ -80,7 +80,7 @@ const getLatestRates = async (
 };
 
 // 外貨の換算に必要なレートデータの取得
-// レートデータ、対象イベントのローカル通貨、ユーザ自国通貨とローカル通貨の比率の3つのデータを返す。
+// 「レートAPIデータ」」対象イベントのローカル通貨」「ユーザ自国通貨とローカル通貨の比率」3つのデータを返す。
 const getExchangeRate = async (
   baseCurrency: string,
   targetCurrency: string,

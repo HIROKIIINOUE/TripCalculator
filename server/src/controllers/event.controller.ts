@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import eventModel from "../models/event.model";
 import { handlePrismaUserError } from "../lib/prisma.errors";
 import { createEventSchema, updateEventSchema } from "../schemas/event.schema";
-import { createEventWithConvertedPrice } from "../services/event.service";
+import {
+  createEventWithConvertedPrice,
+  getEventExchangeRatePreview,
+} from "../services/event.service";
 
 const getAllEvent = async (req: Request, res: Response) => {
   const userId = req.userId;
@@ -28,6 +31,45 @@ const getAllEvent = async (req: Request, res: Response) => {
   }
 };
 
+// 「ユーザID」「旅行ID」ユーザがイベントモーダルで入力した「現地通貨」を受け取り、プレビューUIに必要な「ローカル通貨」「ユーザ自国通貨」「換算に使う２通貨間の比率」を返す
+const getExchangeRatePreview = async (req: Request, res: Response) => {
+  const userId = req.userId;
+  const { tripId } = req.params;
+  const localCurrency =
+    typeof req.query.localCurrency === "string" ? req.query.localCurrency : "";
+
+  if (!Number.isInteger(Number(tripId)) || Number(tripId) <= 0) {
+    res.status(400).json({ message: "this trip ID is invalid" });
+    return;
+  }
+
+  if (!localCurrency.trim()) {
+    res.status(400).json({ message: "localCurrency is required" });
+    return;
+  }
+
+  try {
+    const preview = await getEventExchangeRatePreview(
+      Number(userId),
+      Number(tripId),
+      localCurrency,
+    );
+
+    if (!preview) {
+      res.status(404).json({ message: "Failed to get exchange rate preview" });
+      return;
+    }
+
+    res.status(200).json(preview);
+  } catch (error) {
+    if (handlePrismaUserError(error, res)) {
+      return;
+    }
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
 const addEvent = async (req: Request, res: Response) => {
   const userId = req.userId;
   const { tripId } = req.params;
@@ -40,17 +82,18 @@ const addEvent = async (req: Request, res: Response) => {
     res.status(400).json({ message: "this trip ID is invalid" });
     return;
   }
-  const { date, title, detail, localCurrency, priceLocalCurrency } = parsed.data;
+  const { date, title, detail, localCurrency, priceLocalCurrency } =
+    parsed.data;
   try {
     const newEvent = await createEventWithConvertedPrice(
       Number(userId),
       Number(tripId),
       {
-      date,
-      title,
-      detail,
-      localCurrency,
-      priceLocalCurrency,
+        date,
+        title,
+        detail,
+        localCurrency,
+        priceLocalCurrency,
       },
     );
     if (!newEvent) {
@@ -127,6 +170,7 @@ const updateEvent = async (req: Request, res: Response) => {
 
 export default {
   getAllEvent,
+  getExchangeRatePreview,
   addEvent,
   deleteEvent,
   updateEvent,
