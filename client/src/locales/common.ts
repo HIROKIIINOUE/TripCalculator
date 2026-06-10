@@ -29,6 +29,13 @@ export const commonTranslations = {
       current: "Current",
       close: "Close",
     },
+    notFound: {
+      eyebrow: "404 Error",
+      title: "Page not found",
+      description:
+        "The page you requested may have been moved, deleted, or never existed.",
+      back: "Go Back",
+    },
   },
   ja: {
     appName: "Trip Calculator",
@@ -61,6 +68,13 @@ export const commonTranslations = {
       current: "選択中",
       close: "閉じる",
     },
+    notFound: {
+      eyebrow: "404 エラー",
+      title: "ページが見つかりません",
+      description:
+        "アクセスしようとしたページは移動、削除、または存在しない可能性があります。",
+      back: "前の画面へ戻る",
+    },
   },
   fr: {
     appName: "Trip Calculator",
@@ -91,6 +105,13 @@ export const commonTranslations = {
       title: "Options de langue",
       current: "Actuel",
       close: "Fermer",
+    },
+    notFound: {
+      eyebrow: "Erreur 404",
+      title: "Page introuvable",
+      description:
+        "La page demandee a peut-etre ete deplacee, supprimee ou n'a jamais existe.",
+      back: "Retour",
     },
   },
 } as const;
