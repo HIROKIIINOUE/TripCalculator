@@ -310,7 +310,7 @@ const EventInputModal = (props: Props) => {
           </div>
 
           <div className="rounded-2xl border border-orange-200 bg-orange-50/70 px-4 py-3 shadow-sm">
-            <p className="text-sm font-semibold text-stone-900 sm:text-base">
+            <p className={`text-sm font-semibold sm:text-base ${isPreviewAmountTooLarge ? "text-rose-500" : "text-stone-900"}`}>
               {isPreviewLoading
                 ? "参考換算額: 計算中..."
                 : isPreviewAmountTooLarge
