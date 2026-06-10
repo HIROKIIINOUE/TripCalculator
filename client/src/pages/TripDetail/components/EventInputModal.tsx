@@ -245,6 +245,9 @@ const EventInputModal = (props: Props) => {
 
           <div className="space-y-1">
             <div>
+              <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+                タイトル
+              </p>
               <input
                 type="text"
                 {...register("title", { required: true })}
@@ -257,6 +260,9 @@ const EventInputModal = (props: Props) => {
             </div>
 
             <div>
+              <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+                日付
+              </p>
               <input
                 type="date"
                 {...register("date", { required: true })}
@@ -268,6 +274,9 @@ const EventInputModal = (props: Props) => {
             </div>
 
             <div>
+              <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+                現地通貨
+              </p>
               <Controller
                 name="localCurrency"
                 control={control}
@@ -285,6 +294,9 @@ const EventInputModal = (props: Props) => {
             </div>
 
             <div>
+              <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+                現地価格
+              </p>
               <input
                 type="text"
                 inputMode="numeric"
@@ -315,13 +327,16 @@ const EventInputModal = (props: Props) => {
                 ? "参考換算額: 計算中..."
                 : isPreviewAmountTooLarge
                   ? "参考換算額: 金額が大きすぎるので値を下げてください"
-                : previewAmount !== null && preview
-                  ? `参考換算額: ${previewAmount.toLocaleString()} ${preview.yourCurrency}`
-                  : "参考換算額: -"}
+                  : previewAmount !== null && preview
+                    ? `参考換算額: ${previewAmount.toLocaleString()} ${preview.yourCurrency}`
+                    : "参考換算額: -"}
             </p>
           </div>
 
-          <div className="mt-10">
+          <p className="mt-8 text-xs font-semibold text-stone-500 sm:text-sm">
+            詳細（オプション）
+          </p>
+          <div className="mt-2">
             <textarea
               rows={3}
               {...register("detail")}

@@ -162,6 +162,9 @@ const TripInputModal = (props: Props) => {
           <p className="mb-4 text-left text-lg font-bold text-stone-900 sm:text-xl">
             {isAddModalOpen ? t("home.modal.addHeading") : t("home.modal.editHeading")}
           </p>
+          <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+            {t("home.modal.titlePlaceholder")}
+          </p>
           <input
             type="text"
             {...register("title")}
@@ -171,6 +174,9 @@ const TripInputModal = (props: Props) => {
           <p className="mt-2 min-h-6 text-sm text-rose-500">
             {translateError(errors.title?.message)}
           </p>
+          <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+            Start Date
+          </p>
           <input
             type="date"
             {...register("startDay")}
@@ -179,15 +185,21 @@ const TripInputModal = (props: Props) => {
           <p className="mt-2 min-h-6 text-sm text-rose-500">
             {translateError(errors.startDay?.message)}
           </p>
+          <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+            {t("home.modal.budgetPlaceholder")}
+          </p>
           <input
             type="text"
             inputMode="numeric" // for mobile
             {...register("budget")}
-            className="mt-4 w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400  sm:text-base"
+            className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400  sm:text-base"
             placeholder={t("home.modal.budgetPlaceholder")}
           />
           <p className="mt-2 min-h-6 text-sm text-rose-500">
             {translateError(errors.budget?.message)}
+          </p>
+          <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
+            Your Currency
           </p>
           <Controller
             name="yourCurrency"
