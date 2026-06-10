@@ -5,11 +5,13 @@ import zxcvbn from "zxcvbn";
 import PasswordStrengthUI from '../components/PasswordStrengthUI';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 
 const Signup = () => {
+  const navigate = useNavigate()
   // if set mode as "onBlur", form watch it when users stop focussing
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<SignupForm>({ mode: "onChange", resolver: zodResolver(SignupSchema) })
+  const { register, handleSubmit, formState: { errors, isValid, isSubmitting }, watch } = useForm<SignupForm>({ mode: "onChange", resolver: zodResolver(SignupSchema) })
   const password = watch("password") ?? ""
   const score = zxcvbn(password).score
   const { t } = useTranslation("auth")
@@ -43,6 +45,7 @@ const Signup = () => {
         case 201: {
           const result = await res.json()
           toast.success(t("signup.success", { displayName: result.displayName }))
+          navigate("/login")
           return
         }
         case 409: {
@@ -135,7 +138,8 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 focus-visible:ring-4 focus-visible:ring-orange-300 active:translate-y-0"
+            disabled={!isValid || isSubmitting || score <= 2}
+            className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 active:translate-y-0 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-black disabled:shadow-none"
           >
             {t("signup.submit")}
           </button>

@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/auth/useAuth'
 import { useTranslation } from 'react-i18next'
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
+  const { register, handleSubmit, formState: { errors, isValid, isSubmitting } } = useForm<LoginForm>({ mode: "onChange", resolver: zodResolver(LoginSchema) })
   const { storeAuth, clearAuth, } = useAuth()
   const { t } = useTranslation("auth")
   const translateError = (message?: string) =>
@@ -112,7 +112,8 @@ const Login = () => {
           </p>
           <button
             type="submit"
-            className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 focus-visible:ring-4 focus-visible:ring-orange-300 active:translate-y-0"
+            disabled={!isValid || isSubmitting}
+            className="mt-7 h-13 rounded-2xl bg-orange-500 px-6 text-base font-black text-white shadow-[0_20px_40px_rgba(249,115,22,0.34)] transition hover:-translate-y-0.5 hover:bg-orange-600 active:translate-y-0 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-black disabled:shadow-none"
           >
             {t("login.submit")}
           </button>
