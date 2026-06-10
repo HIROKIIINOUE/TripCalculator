@@ -10,7 +10,6 @@ type Props = {
 const TripSummary = (props: Props) => {
   const { trip, events } = props
   const totalYourAmount = events.reduce((sum, event) => sum + event.priceYourCurrency, 0)
-  const totalLocalAmount = events.reduce((sum, event) => sum + event.priceLocalCurrency, 0)
   const difference = trip.budget - totalYourAmount
 
   const compactSummaryItems = [
@@ -22,14 +21,14 @@ const TripSummary = (props: Props) => {
     {
       label: "合計",
       value: `${totalYourAmount.toLocaleString()} ${trip.yourCurrency}`,
-      subValue: `${totalLocalAmount.toLocaleString()} ${events[0]?.localCurrency ?? ""}`,
       accent: "from-orange-200 via-orange-50 to-white",
     },
     {
       label: "差分",
       value: `${difference.toLocaleString()} ${trip.yourCurrency}`,
-      subValue: difference >= 0 ? "予算内です" : "予算オーバーです",
+      subValue: difference >= 0 ? "" : "予算オーバーです",
       accent: difference >= 0 ? "from-emerald-100 via-emerald-50 to-white" : "from-red-200 via-red-50 to-white",
+      excessive: difference < 0 ? "text-red-500" : ""
     },
   ]
 
@@ -40,7 +39,7 @@ const TripSummary = (props: Props) => {
           <p className="text-[11px] font-semibold uppercase text-stone-500 sm:text-xs">
             旅行タイトル
           </p>
-          <p className="mt-2 break-words text-xl font-bold leading-snug text-stone-900 sm:mt-3 sm:text-2xl">
+          <p className="mt-2 break-words text-xl font-bold text-stone-900 sm:mt-3 sm:text-2xl">
             {trip.title}
           </p>
         </article>
@@ -51,12 +50,17 @@ const TripSummary = (props: Props) => {
               key={item.label}
               className={`rounded-[1.25rem] border border-orange-100 bg-gradient-to-br ${item.accent} px-3 py-2.5 shadow-sm sm:rounded-3xl sm:p-4`}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500 sm:text-xs sm:tracking-[0.2em]">
+              <p className={`text-[10px] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.1em] ${item.excessive ? item.excessive : "text-stone-500"}`}>
                 {item.label}
               </p>
-              <p className="mt-1 break-words text-sm font-bold leading-snug text-stone-900 sm:mt-3 sm:text-lg">
+              <p className={`mt-1 break-words text-sm font-bold sm:mt-3 sm:text-lg ${item.excessive ? item.excessive : "text-stone-900"}`}>
                 {item.value}
               </p>
+              {item.subValue ? (
+                <p className={`mt-2 break-words text-xs font-medium sm:text-sm ${item.excessive ? item.excessive : "text-stone-600"}`}>
+                  {item.subValue}
+                </p>
+              ) : null}
             </article>
           ))}
         </div>
