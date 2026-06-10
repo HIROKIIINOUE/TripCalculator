@@ -1,6 +1,8 @@
 import z from "zod";
 import { supportedCurrencyCodes } from "../constants/currencies";
 
+const MAX_TRIP_BUDGET = 2147483647;
+
 export const addTripSchema = z.object({
   title: z.string().min(1, "trip.errors.title.required"),
   startDay: z.iso.date("trip.errors.startDay.invalid"), // "YYYY-MM-DD"形の文字列を通す
@@ -10,6 +12,9 @@ export const addTripSchema = z.object({
     .regex(/^[0-9]+$/, "trip.errors.budget.invalid")
     .refine((value) => Number(value) > 0, {
       message: "trip.errors.budget.min",
+    })
+    .refine((value) => Number(value) <= MAX_TRIP_BUDGET, {
+      message: "trip.errors.budget.max",
     }),
   yourCurrency: z
     .string()

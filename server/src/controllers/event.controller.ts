@@ -3,6 +3,7 @@ import eventModel from "../models/event.model";
 import { handlePrismaUserError } from "../lib/prisma.errors";
 import { createEventSchema, updateEventSchema } from "../schemas/event.schema";
 import {
+  CONVERTED_PRICE_TOO_LARGE_MESSAGE,
   createEventWithConvertedPrice,
   getEventExchangeRatePreview,
   updateEventWithConvertedPrice,
@@ -24,6 +25,13 @@ const getAllEvent = async (req: Request, res: Response) => {
     }
     res.status(200).json(events);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE
+    ) {
+      res.status(400).json({ message: CONVERTED_PRICE_TOO_LARGE_MESSAGE });
+      return;
+    }
     if (handlePrismaUserError(error, res)) {
       return;
     }
@@ -63,6 +71,13 @@ const getExchangeRatePreview = async (req: Request, res: Response) => {
 
     res.status(200).json(preview);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE
+    ) {
+      res.status(400).json({ message: CONVERTED_PRICE_TOO_LARGE_MESSAGE });
+      return;
+    }
     if (handlePrismaUserError(error, res)) {
       return;
     }

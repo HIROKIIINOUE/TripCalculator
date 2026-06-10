@@ -36,6 +36,7 @@ export const homeTranslations = {
             required: "Please enter a budget.",
             invalid: "Budget must be numeric.",
             min: "Budget must be greater than 0.",
+            max: "Budget is too large. Please enter a smaller value.",
           },
           yourCurrency: {
             invalid: "Please select a valid currency.",
@@ -81,6 +82,7 @@ export const homeTranslations = {
             required: "予算を入力してください",
             invalid: "予算は数字で入力してください",
             min: "予算は1以上で入力してください",
+            max: "予算が大きすぎるので値を下げてください",
           },
           yourCurrency: {
             invalid: "有効な通貨を選択してください",
@@ -126,6 +128,7 @@ export const homeTranslations = {
             required: "Veuillez saisir un budget.",
             invalid: "Le budget doit etre numerique.",
             min: "Le budget doit etre superieur a 0.",
+            max: "Le budget est trop eleve. Veuillez saisir une valeur plus petite.",
           },
           yourCurrency: {
             invalid: "Veuillez selectionner une devise valide.",

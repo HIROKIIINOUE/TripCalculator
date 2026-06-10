@@ -27,7 +27,7 @@ const TripInputModal = (props: Props) => {
   const { setIsAddModalOpen, isAddModalOpen, trip, setTrips, setIsUpdateModalOpen, isUpdateModalOpen } = props;
   const { t } = useTranslation("home")
   const translateError = (message?: string) =>
-    message ? t(message.replace(/^trip\./, "modal.")) : ""
+    message ? t(message.replace(/^trip\./, "home.modal.")) : ""
 
   const formattedStartDay = trip?.startDay.includes("T")
     ? trip.startDay.split("T")[0]

@@ -11,6 +11,8 @@ import { useAuth } from "../../../contexts/auth/useAuth";
 import toast from "react-hot-toast";
 import type { Trip } from "../../../types/trip.type";
 
+const MAX_EVENT_PRICE = 2147483647;
+const CONVERTED_PRICE_TOO_LARGE_MESSAGE = "converted_price_too_large";
 
 type Props = {
   trip: Trip
@@ -129,6 +131,8 @@ const EventInputModal = (props: Props) => {
       parsedPrice >= 0
       ? Math.round(parsedPrice * preview.appliedExchangeRate)
       : null;
+  const isPreviewAmountTooLarge =
+    previewAmount !== null && previewAmount > MAX_EVENT_PRICE;
   // ===================================
 
   // イベント追加ロジック
@@ -152,7 +156,14 @@ const EventInputModal = (props: Props) => {
       });
 
       if (!res.ok) {
-        toast.error(res.status === 400 ? "イベントデータの追加に失敗しました" : "サーバーエラー");
+        const result = await res.json().catch(() => null);
+        if (res.status === 400 && result?.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE) {
+          toast.error("換算後の金額が大きすぎるので値を下げてください");
+        } else if (res.status === 400) {
+          toast.error("イベントデータの追加に失敗しました");
+        } else {
+          toast.error("サーバーエラー");
+        }
         return;
       }
 
@@ -189,7 +200,14 @@ const EventInputModal = (props: Props) => {
       });
 
       if (!res.ok) {
-        toast.error(res.status === 404 ? "イベントデータが見つかりません" : "サーバーエラー");
+        const result = await res.json().catch(() => null);
+        if (res.status === 400 && result?.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE) {
+          toast.error("換算後の金額が大きすぎるので値を下げてください");
+        } else if (res.status === 404) {
+          toast.error("イベントデータが見つかりません");
+        } else {
+          toast.error("サーバーエラー");
+        }
         return;
       }
 
@@ -275,14 +293,17 @@ const EventInputModal = (props: Props) => {
                   validate: (value) =>
                     value.trim() !== "" &&
                     Number.isInteger(Number(value)) &&
-                    Number(value) >= 0,
+                    Number(value) >= 0 &&
+                    Number(value) <= MAX_EVENT_PRICE,
                 })}
                 className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400 sm:text-base"
                 placeholder="現地価格"
               />
               <p className="mt-1 min-h-5 text-sm text-rose-500">
-                {errors.priceLocalCurrency
-                  ? "現地価格は0以上の整数で入力してください"
+                {errors.priceLocalCurrency?.type === "validate"
+                  ? Number(priceLocalCurrency) > MAX_EVENT_PRICE
+                    ? "金額が大きすぎるので値を下げてください"
+                    : "現地価格は0以上の整数で入力してください"
                   : ""}
               </p>
             </div>
@@ -292,6 +313,8 @@ const EventInputModal = (props: Props) => {
             <p className="text-sm font-semibold text-stone-900 sm:text-base">
               {isPreviewLoading
                 ? "参考換算額: 計算中..."
+                : isPreviewAmountTooLarge
+                  ? "参考換算額: 金額が大きすぎるので値を下げてください"
                 : previewAmount !== null && preview
                   ? `参考換算額: ${previewAmount.toLocaleString()} ${preview.yourCurrency}`
                   : "参考換算額: -"}

@@ -4,12 +4,21 @@ import eventModel from "../models/event.model";
 import { CreateEventBody, UpdateEventBody } from "../schemas/event.schema";
 import { getExchangeRate } from "./exchange-rate.service";
 
+const MAX_EVENT_PRICE = 2147483647;
+const CONVERTED_PRICE_TOO_LARGE_MESSAGE = "converted_price_too_large";
+
 // 支払い金額を自国通貨で算出
 const calculateYourCurrencyPrice = (
   priceLocalCurrency: number,
   appliedExchangeRate: number,
 ) => {
   return Math.round(priceLocalCurrency * appliedExchangeRate);
+};
+
+const validateConvertedPrice = (priceYourCurrency: number) => {
+  if (priceYourCurrency > MAX_EVENT_PRICE) {
+    throw new Error(CONVERTED_PRICE_TOO_LARGE_MESSAGE);
+  }
 };
 
 // controllerからDB追加modelを呼ぶのではなく、ここで必要情報を算出し、ここでDB追加modelを呼ぶ
@@ -25,13 +34,15 @@ const createEventWithConvertedPrice = async (
   }
 
   const { rate } = await getExchangeRate(data.localCurrency, yourCurrency);
+  const priceYourCurrency = calculateYourCurrencyPrice(
+    data.priceLocalCurrency,
+    rate,
+  );
+  validateConvertedPrice(priceYourCurrency);
 
   const newEvent = await eventModel.add(userId, tripId, {
     ...data,
-    priceYourCurrency: calculateYourCurrencyPrice(
-      data.priceLocalCurrency,
-      rate,
-    ),
+    priceYourCurrency,
     appliedExchangeRate: rate,
   });
 
@@ -92,17 +103,20 @@ const updateEventWithConvertedPrice = async (
   const priceLocalCurrency =
     data.priceLocalCurrency ?? targetEvent.priceLocalCurrency;
   const { rate } = await getExchangeRate(localCurrency, yourCurrency);
+  const priceYourCurrency = calculateYourCurrencyPrice(priceLocalCurrency, rate);
+  validateConvertedPrice(priceYourCurrency);
 
   return eventModel.update(userId, eventId, {
     ...data,
     localCurrency,
     priceLocalCurrency,
-    priceYourCurrency: calculateYourCurrencyPrice(priceLocalCurrency, rate),
+    priceYourCurrency,
     appliedExchangeRate: rate,
   });
 };
 
 export {
+  CONVERTED_PRICE_TOO_LARGE_MESSAGE,
   calculateYourCurrencyPrice,
   createEventWithConvertedPrice,
   getEventExchangeRatePreview,
