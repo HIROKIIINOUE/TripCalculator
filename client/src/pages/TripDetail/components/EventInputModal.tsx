@@ -73,7 +73,7 @@ const EventInputModal = (props: Props) => {
   // useWatchでは指定したnameの値を監視し、定数として値を格納できる
   const localCurrency = useWatch({ control, name: "localCurrency" });
   const priceLocalCurrency = useWatch({ control, name: "priceLocalCurrency" });
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV;
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 
   const closeModal = () => {
     if (setIsAddModalOpen && isAddModalOpen) {

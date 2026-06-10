@@ -20,7 +20,7 @@ const EventOperationButton = (props: Props) => {
 
   const handleDelete = async () => {
     if (!confirm(t("tripDetail.operation.deleteConfirm"))) return
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
     try {
       const results = await Promise.all(

@@ -4,7 +4,7 @@ import type { User } from "../../types/user.type"
 
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
   const [user, setUser] = useState<User | null>(null)
   const [accessToken, setAccessToken] = useState<string>("")
   const [authStatus, setAuthStatus] = useState<"unauthenticated" | "authenticated" | "checking">("checking")

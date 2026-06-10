@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 const LogoutButton = () => {
   const { clearAuth } = useAuth()
   const navigation = useNavigate()
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
   const { t } = useTranslation()
 
   const handleLogout = async () => {

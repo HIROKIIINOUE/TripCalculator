@@ -64,7 +64,7 @@ const TripInputModal = (props: Props) => {
     }
 
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+      const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
       const res = await fetch(`${BACKEND_URL}/trips`, {
         method: "POST",
         headers: {
@@ -102,7 +102,7 @@ const TripInputModal = (props: Props) => {
       yourCurrency: data.yourCurrency
     }
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+      const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
       const res = await fetch(`${BACKEND_URL}/trips/${trip?.id}`, {
         method: "PATCH",
         headers: {

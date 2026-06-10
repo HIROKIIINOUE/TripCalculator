@@ -8,15 +8,35 @@ import eventRouter from "./routes/event.route";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.DEV_PORT;
+const PORT = Number(process.env.PORT ?? 3000);
+const allowedOrigin = process.env.FRONT_URL?.trim();
+
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SIGN_KEY));
 app.use(
   cors({
-    origin: [`${process.env.DEV_FRONT_URL}`],
+    origin: (origin, callback) => {
+      // origin -> リクエストを送ってくる元のURL
+      // callback -> nullはエラー無しの意味、trueは「このURLを許可する」という意味
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (origin === allowedOrigin) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("CORS origin is not allowed"));
+    },
     credentials: true,
   }),
 );
+
+app.get("/healthz", (_req, res) => {
+  res.status(200).json({ ok: true });
+});
 
 app.use("/users", userRouter);
 app.use("/trips", tripRouter);
@@ -27,5 +47,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`server is running http://localhost:${PORT}`);
+  console.log(`server is running on port ${PORT}`);
 });

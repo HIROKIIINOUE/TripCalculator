@@ -21,7 +21,7 @@ const TripDetailPage = () => {
   const [selectedEventIds, setSelectedEventIds] = useState<number[]>([])
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
   const { t } = useTranslation("tripDetail")
 
 

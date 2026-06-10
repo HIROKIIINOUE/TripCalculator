@@ -31,7 +31,7 @@ const Signup = () => {
       password: data.password,
       language: "en"  // <Later> get and set app's setup language 
     }
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
     try {
       const res = await fetch(`${BACKEND_URL}/users/signup`, {

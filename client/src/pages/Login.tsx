@@ -18,7 +18,7 @@ const Login = () => {
       password: data.password
     }
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+      const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
       const res = await fetch(`${BACKEND_URL}/users/login`, {
         method: "POST",
         headers: {
