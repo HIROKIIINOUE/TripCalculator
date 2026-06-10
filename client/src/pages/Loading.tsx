@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next"
 const Loading = () => {
   const { t } = useTranslation()
   return (
-    <main className="flex min-h-screen items-center justify-center bg-orange-50 px-6">
-      <div className="w-full max-w-sm absolute top-60 rounded-3xl bg-white p-8 text-center shadow-lg shadow-orange-100">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-orange-50/95 px-6 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-lg shadow-orange-100">
         <p className="text-xs font-semibold uppercase tracking-[4px] text-orange-500">
           Trip Calculator
         </p>
@@ -14,7 +14,7 @@ const Loading = () => {
         </div>
         <h1 className="text-xl font-semibold text-slate-800">{t("messages.loading")}</h1>
       </div>
-    </main>
+    </div>
   )
 }
 
