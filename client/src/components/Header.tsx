@@ -1,5 +1,5 @@
 import { MdContactSupport, MdLanguage } from 'react-icons/md'
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import ToSignupButton from './buttons/ToSignupButton';
 import ToLoginButton from './buttons/ToLoginButton';
 import LogoutButton from './buttons/LogoutButton';
@@ -51,13 +51,13 @@ const Header = () => {
               ) : null}
             </li>
             <li>
-              <button
-                type='button'
+              <Link
+                to="/contact"
                 className='flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-800 transition hover:-translate-y-0.5 hover:border-orange-300 hover:bg-orange-100 hover:text-orange-700'
               >
                 <MdContactSupport className='text-lg' />
                 <span>{t("actions.contact")}</span>
-              </button>
+              </Link>
             </li>
           </ul>
         </div>

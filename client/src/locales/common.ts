@@ -36,6 +36,25 @@ export const commonTranslations = {
         "The page you requested may have been moved, deleted, or never existed.",
       back: "Go Back",
     },
+    contactPage: {
+      title: "Contact",
+      description:
+        "If you have questions or feedback, please send a message to the email address below.",
+      email: "Email Address",
+      emailPlaceholder: "Email Address",
+      website: "Website",
+      message: "Message",
+      messagePlaceholder: "Write your message here",
+      success: "Your message has been sent.",
+      failed: "Failed to send your message.",
+      serverError: "Server error. Please try again later.",
+      submit: "Open Email",
+      ctaNote: "Your default email app will open with a prefilled subject.",
+      errors: {
+        email: "Please enter a valid email address.",
+        message: "Please enter your message.",
+      },
+    },
   },
   ja: {
     appName: "Trip Calculator",
@@ -75,6 +94,25 @@ export const commonTranslations = {
         "アクセスしようとしたページは移動、削除、または存在しない可能性があります。",
       back: "前の画面へ戻る",
     },
+    contactPage: {
+      title: "コンタクト",
+      description:
+        "ご質問やご意見があれば、以下のメールアドレスまでメッセージを送ってください。",
+      email: "メールアドレス",
+      emailPlaceholder: "メールアドレス",
+      website: "Webサイト",
+      message: "本文",
+      messagePlaceholder: "お問い合わせ内容を入力してください",
+      success: "お問い合わせを送信しました。",
+      failed: "お問い合わせの送信に失敗しました。",
+      serverError: "サーバーエラーです。時間を置いて再度お試しください。",
+      submit: "メールを開く",
+      ctaNote: "既定のメールアプリが開き、件名が自動入力されます。",
+      errors: {
+        email: "正しいメールアドレスを入力してください。",
+        message: "本文を入力してください。",
+      },
+    },
   },
   fr: {
     appName: "Trip Calculator",
@@ -112,6 +150,26 @@ export const commonTranslations = {
       description:
         "La page demandee a peut-etre ete deplacee, supprimee ou n'a jamais existe.",
       back: "Retour",
+    },
+    contactPage: {
+      title: "Contact",
+      description:
+        "Si vous avez des questions ou des commentaires, envoyez un message a l'adresse e-mail ci-dessous.",
+      email: "Adresse e-mail",
+      emailPlaceholder: "Adresse e-mail",
+      website: "Site web",
+      message: "Message",
+      messagePlaceholder: "Saisissez votre message ici",
+      success: "Votre message a ete envoye.",
+      failed: "L'envoi du message a echoue.",
+      serverError: "Erreur du serveur. Veuillez reessayer plus tard.",
+      submit: "Ouvrir l'e-mail",
+      ctaNote:
+        "Votre application de messagerie par defaut s'ouvrira avec un objet pre-rempli.",
+      errors: {
+        email: "Veuillez saisir une adresse e-mail valide.",
+        message: "Veuillez saisir votre message.",
+      },
     },
   },
 } as const;

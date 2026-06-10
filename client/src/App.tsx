@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound'
 import GuestRoute from './router/GuestRoute'
 import ProtectedRoute from './router/ProtectedRoute'
 import TripDetailPage from './pages/TripDetail/TripDetailPage'
+import ContactForm from './pages/ContactForm'
 
 function App() {
   const { accessToken, authStatus, checkUserAuthentication, restoreAccessToken } = useAuth()
@@ -55,6 +56,10 @@ function App() {
               path="signup"
               element={<Signup />} />
           </Route>
+          <Route
+            path="contact"
+            element={<ContactForm />}
+          />
           <Route path="home" element={<ProtectedRoute />}>
             <Route
               index

@@ -1,5 +1,5 @@
 import { MdContactSupport, MdLanguage } from 'react-icons/md'
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import ToSignupButton from './buttons/ToSignupButton'
 import ToLoginButton from './buttons/ToLoginButton'
 import LogoutButton from './buttons/LogoutButton'
@@ -41,13 +41,13 @@ const Footer = () => {
             ) : null}
           </li>
           <li>
-            <button
-              type='button'
-              className='flex w-full flex-col items-center justify-center gap-1 rounded-2xl bg-orange-50 px-3 py-2 text-slate-700 ring-1 ring-orange-200 transition active:scale-95'
+            <Link
+              to="/contact"
+              className='flex w-full flex-col items-center justify-center gap-1 rounded-2xl bg-orange-50 px-3 py-2 text-slate-700 transition active:scale-95'
             >
               <MdContactSupport className='text-xl' />
               <span className='text-xs'>{t("actions.contact")}</span>
-            </button>
+            </Link>
           </li>
         </ul>
       </div>
