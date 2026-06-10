@@ -57,6 +57,7 @@ Track travel budgets, record local spending, and convert expenses into your home
 
 <h2>Project Status</h2>
 <p>In active development as a portfolio-focused full-stack web application.</p>
+<p><a href="https://trip-calculator-jrio.onrender.com">https://trip-calculator-jrio.onrender.com</a></p>
 
 <h2>Future Improvements</h2>
 <ul>
