@@ -153,9 +153,10 @@ const TripInputModal = (props: Props) => {
 
   return (
     <>
-      <div onClick={handleClose} className="fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-sm" ></div>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-sm" ></div>
+      <div onClick={handleClose} className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
         <form
+          onClick={(event) => event.stopPropagation()}
           onSubmit={isAddModalOpen ? handleSubmit(addTrip) : handleSubmit(updateTrip)}
           className="w-full max-w-xl space-y-1 rounded-[2rem] border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-5 shadow-[0_24px_80px_-28px_rgba(234,88,12,0.45)] sm:p-8"
         >
