@@ -10,6 +10,7 @@ import type {
 import { useAuth } from "../../../contexts/auth/useAuth";
 import toast from "react-hot-toast";
 import type { Trip } from "../../../types/trip.type";
+import { useTranslation } from "react-i18next";
 
 const MAX_EVENT_PRICE = 2147483647;
 const CONVERTED_PRICE_TOO_LARGE_MESSAGE = "converted_price_too_large";
@@ -40,6 +41,7 @@ const EventInputModal = (props: Props) => {
     isUpdateModalOpen,
   } = props;
   const { accessToken } = useAuth();
+  const { t } = useTranslation("tripDetail");
   const [preview, setPreview] = useState<ExchangeRatePreview | null>(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const formattedDate = event?.date.includes("T")
@@ -158,24 +160,24 @@ const EventInputModal = (props: Props) => {
       if (!res.ok) {
         const result = await res.json().catch(() => null);
         if (res.status === 400 && result?.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE) {
-          toast.error("換算後の金額が大きすぎるので値を下げてください");
+          toast.error(t("tripDetail.modal.convertedTooLarge"));
         } else if (res.status === 400) {
-          toast.error("イベントデータの追加に失敗しました");
+          toast.error(t("tripDetail.modal.addFailed"));
         } else {
-          toast.error("サーバーエラー");
+          toast.error(t("tripDetail.modal.serverError"));
         }
         return;
       }
 
       const createdEvent = (await res.json()) as TripDetailEvent;
       setEvents((prev) => sortEventsByDateDesc([createdEvent, ...prev]));
-      toast.success("イベントを追加しました");
+      toast.success(t("tripDetail.modal.addSuccess"));
       if (setIsAddModalOpen) {
         setIsAddModalOpen(false);
       }
     } catch (error) {
       console.error(error);
-      toast.error("ネットワークエラー");
+      toast.error(t("tripDetail.fetch.networkError"));
     }
   };
 
@@ -202,11 +204,11 @@ const EventInputModal = (props: Props) => {
       if (!res.ok) {
         const result = await res.json().catch(() => null);
         if (res.status === 400 && result?.message === CONVERTED_PRICE_TOO_LARGE_MESSAGE) {
-          toast.error("換算後の金額が大きすぎるので値を下げてください");
+          toast.error(t("tripDetail.modal.convertedTooLarge"));
         } else if (res.status === 404) {
-          toast.error("イベントデータが見つかりません");
+          toast.error(t("tripDetail.modal.notFound"));
         } else {
-          toast.error("サーバーエラー");
+          toast.error(t("tripDetail.modal.serverError"));
         }
         return;
       }
@@ -218,13 +220,13 @@ const EventInputModal = (props: Props) => {
           ...prev.filter((currentEvent) => currentEvent.id !== event.id),
         ]),
       );
-      toast.success("イベントを更新しました");
+      toast.success(t("tripDetail.modal.updateSuccess"));
       if (setIsUpdateModalOpen) {
         setIsUpdateModalOpen(false);
       }
     } catch (error) {
       console.error(error);
-      toast.error("ネットワークエラー");
+      toast.error(t("tripDetail.fetch.networkError"));
     }
   };
 
@@ -240,28 +242,28 @@ const EventInputModal = (props: Props) => {
           className="w-full max-w-xl rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-5 shadow-[0_24px_80px_-28px_rgba(234,88,12,0.45)] sm:p-7"
         >
           <p className="mb-4 text-left text-lg font-bold text-stone-900 sm:text-xl">
-            {isAddModalOpen ? "イベントを追加する" : "イベントを編集する"}
+            {isAddModalOpen ? t("tripDetail.modal.addHeading") : t("tripDetail.modal.editHeading")}
           </p>
 
           <div className="space-y-1">
             <div>
               <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
-                タイトル
+                {t("tripDetail.modal.title")}
               </p>
               <input
                 type="text"
                 {...register("title", { required: true })}
                 className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400 sm:text-base"
-                placeholder="タイトル"
+                placeholder={t("tripDetail.modal.title")}
               />
               <p className="mt-1 min-h-5 text-sm text-rose-500">
-                {errors.title ? "タイトルを入力してください" : ""}
+                {errors.title ? t("tripDetail.modal.titleRequired") : ""}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
-                日付
+                {t("tripDetail.modal.date")}
               </p>
               <input
                 type="date"
@@ -269,13 +271,13 @@ const EventInputModal = (props: Props) => {
                 className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition focus:border-orange-400 sm:text-base"
               />
               <p className="mt-1 min-h-5 text-sm text-rose-500">
-                {errors.date ? "日付を入力してください" : ""}
+                {errors.date ? t("tripDetail.modal.dateRequired") : ""}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
-                現地通貨
+                {t("tripDetail.modal.localCurrency")}
               </p>
               <Controller
                 name="localCurrency"
@@ -289,13 +291,13 @@ const EventInputModal = (props: Props) => {
                 )}
               />
               <p className="mt-1 min-h-5 text-sm text-rose-500">
-                {errors.localCurrency ? "現地通貨を選択してください" : ""}
+                {errors.localCurrency ? t("tripDetail.modal.localCurrencyRequired") : ""}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs font-semibold text-stone-500 sm:text-sm">
-                現地価格
+                {t("tripDetail.modal.localPrice")}
               </p>
               <input
                 type="text"
@@ -309,13 +311,13 @@ const EventInputModal = (props: Props) => {
                     Number(value) <= MAX_EVENT_PRICE,
                 })}
                 className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400 sm:text-base"
-                placeholder="現地価格"
+                placeholder={t("tripDetail.modal.localPrice")}
               />
               <p className="mt-1 min-h-5 text-sm text-rose-500">
                 {errors.priceLocalCurrency?.type === "validate"
                   ? Number(priceLocalCurrency) > MAX_EVENT_PRICE
-                    ? "金額が大きすぎるので値を下げてください"
-                    : "現地価格は0以上の整数で入力してください"
+                    ? t("tripDetail.modal.localPriceTooLarge")
+                    : t("tripDetail.modal.localPriceInvalid")
                   : ""}
               </p>
             </div>
@@ -324,24 +326,27 @@ const EventInputModal = (props: Props) => {
           <div className="rounded-2xl border border-orange-200 bg-orange-50/70 px-4 py-3 shadow-sm">
             <p className={`text-sm font-semibold sm:text-base ${isPreviewAmountTooLarge ? "text-rose-500" : "text-stone-900"}`}>
               {isPreviewLoading
-                ? "参考換算額: 計算中..."
+                ? t("tripDetail.modal.previewPending")
                 : isPreviewAmountTooLarge
-                  ? "参考換算額: 金額が大きすぎるので値を下げてください"
+                  ? t("tripDetail.modal.previewTooLarge")
                   : previewAmount !== null && preview
-                    ? `参考換算額: ${previewAmount.toLocaleString()} ${preview.yourCurrency}`
-                    : "参考換算額: -"}
+                    ? t("tripDetail.modal.previewValue", {
+                      amount: previewAmount.toLocaleString(),
+                      currency: preview.yourCurrency,
+                    })
+                    : t("tripDetail.modal.previewEmpty")}
             </p>
           </div>
 
           <p className="mt-8 text-xs font-semibold text-stone-500 sm:text-sm">
-            詳細（オプション）
+            {t("tripDetail.modal.detailOptional")}
           </p>
           <div className="mt-2">
             <textarea
               rows={3}
               {...register("detail")}
               className="w-full rounded-2xl border border-orange-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-orange-400 sm:text-base"
-              placeholder="詳細（オプション）"
+              placeholder={t("tripDetail.modal.detailOptional")}
             />
           </div>
 
@@ -351,14 +356,14 @@ const EventInputModal = (props: Props) => {
               disabled={!isValid || isSubmitting}
               className="inline-flex cursor-pointer items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_-18px_rgba(249,115,22,0.9)] transition hover:bg-orange-600 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-black disabled:shadow-none sm:min-w-32 sm:text-base"
             >
-              {isAddModalOpen ? "追加" : "更新"}
+              {isAddModalOpen ? t("tripDetail.modal.submit") : t("tripDetail.modal.update")}
             </button>
             <button
               type="button"
               onClick={closeModal}
               className="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-orange-200 bg-white px-5 py-3 text-sm font-semibold text-orange-500 shadow-sm transition hover:border-orange-300 hover:bg-orange-50 focus:outline-none sm:min-w-32 sm:text-base"
             >
-              キャンセル
+              {t("tripDetail.modal.cancel")}
             </button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import type { TripDetailEvent } from "../../../types/event.type"
+import { useTranslation } from "react-i18next"
 
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 
 const EventDetail = (props: Props) => {
   const { event, onClose } = props
+  const { t } = useTranslation("tripDetail")
   const formattedEventDay = event?.date.includes("T")
     ? event.date.split("T")[0]
     : event.date
@@ -26,7 +28,7 @@ const EventDetail = (props: Props) => {
           <div className="mt-6 grid gap-3 ">
             <article className="rounded-3xl border border-orange-100 bg-white p-4 shadow-sm">
               <p className="text-xs font-semibold uppercase text-stone-500">
-                現地通貨
+                {t("tripDetail.detail.localCurrency")}
               </p>
               <p className="mt-3 text-base font-bold text-stone-900">
                 {event.priceLocalCurrency.toLocaleString()} {event.localCurrency}
@@ -37,7 +39,7 @@ const EventDetail = (props: Props) => {
 
           <div className="mt-5 rounded-3xl border border-orange-100 bg-white p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase text-stone-500">
-              詳細
+              {t("tripDetail.detail.detail")}
             </p>
             <p className="mt-3 text-sm leading-7 text-stone-700">
               {event.detail}
@@ -49,7 +51,7 @@ const EventDetail = (props: Props) => {
               onClick={onClose}
               className="inline-flex items-center justify-center rounded-2xl border border-orange-200 bg-white px-5 py-3 text-sm font-semibold text-orange-500 shadow-sm transition hover:border-orange-300 hover:bg-orange-50  cursor-pointer"
             >
-              閉じる
+              {t("tripDetail.detail.close")}
             </button>
           </div>
         </div>

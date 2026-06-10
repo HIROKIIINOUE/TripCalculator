@@ -9,6 +9,7 @@ import { useAuth } from "../../contexts/auth/useAuth"
 import toast from "react-hot-toast"
 import Loading from "../Loading"
 import EventInputModal from "./components/EventInputModal"
+import { useTranslation } from "react-i18next"
 
 const TripDetailPage = () => {
   const { tripId } = useParams()
@@ -21,6 +22,7 @@ const TripDetailPage = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
+  const { t } = useTranslation("tripDetail")
 
 
   // 該当の旅行情報と紐づくイベントデータの取得
@@ -40,11 +42,11 @@ const TripDetailPage = () => {
         const resultTrip = await resTrip.json()
         if (!resTrip.ok) {
           if (resTrip.status === 404) {
-            toast.error("Trip is not found")
+            toast.error(t("tripDetail.fetch.tripNotFound"))
             setIsTripNotFound(true)
             return
           }
-          toast.error("server error")
+          toast.error(t("tripDetail.fetch.serverError"))
           setIsTripNotFound(true)
           return
         }
@@ -63,10 +65,10 @@ const TripDetailPage = () => {
         })
         if (!resEvent.ok) {
           if (resEvent.status === 404) {
-            toast.error("Events are not found")
+            toast.error(t("tripDetail.fetch.eventsNotFound"))
             return
           }
-          toast.error("server error")
+          toast.error(t("tripDetail.fetch.serverError"))
           return
         }
         const resultEvent = await resEvent.json()
@@ -74,7 +76,7 @@ const TripDetailPage = () => {
 
       } catch (error) {
         console.error(error)
-        toast.error("ネットワークエラー")
+        toast.error(t("tripDetail.fetch.networkError"))
         setIsNetworkError(true)
       } finally {
         setIsLoading(false)
@@ -82,7 +84,7 @@ const TripDetailPage = () => {
     }
     getTripAndEvents()
 
-  }, [tripId, accessToken])
+  }, [tripId, accessToken, t])
 
 
   if (isLoading) return <Loading />

@@ -5,6 +5,7 @@ import EventDetail from "./EventDetail"
 import EventInputModal from "./EventInputModal"
 import type { TripDetailEvent } from "../../../types/event.type"
 import type { Trip } from "../../../types/trip.type"
+import { useTranslation } from "react-i18next"
 
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 
 const EventCard = (props: Props) => {
   const { trip, event, setEvents, selectedEventIds, setSelectedEventIds } = props
+  const { t } = useTranslation("tripDetail")
   const isSelected = selectedEventIds.includes(event.id)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
@@ -68,13 +70,13 @@ const EventCard = (props: Props) => {
             <div className="grid gap-1 text-xs text-stone-600 sm:grid-cols-2 sm:text-sm">
 
               <p className="min-w-0 break-words">
-                <span className="mr-2 font-medium text-stone-500">現地通貨</span>
+                <span className="mr-2 font-medium text-stone-500">{t("tripDetail.card.localCurrency")}</span>
                 <span className="font-semibold text-stone-900">
                   {event.priceLocalCurrency.toLocaleString()} {event.localCurrency}
                 </span>
               </p>
               <p className="min-w-0 break-words">
-                <span className="mr-2 font-medium text-stone-500">自国通貨</span>
+                <span className="mr-2 font-medium text-stone-500">{t("tripDetail.card.yourCurrency")}</span>
                 <span className="font-semibold text-stone-900">
                   {event.priceYourCurrency.toLocaleString()} {trip.yourCurrency}
                 </span>
@@ -86,14 +88,14 @@ const EventCard = (props: Props) => {
             <button
               type="button"
               onClick={() => setIsUpdateModalOpen(true)}
-              aria-label={`${event.title}を編集`}
+              aria-label={t("tripDetail.card.editAria", { title: event.title })}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700 0 sm:h-11 sm:w-11 cursor-pointer"
             >
               <FaRegEdit className="text-base" />
             </button>
             <button
               type="button"
-              aria-label={`${event.title}を選択`}
+              aria-label={t("tripDetail.card.selectAria", { title: event.title })}
               onClick={handleSelect}
               className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition sm:h-11 sm:w-11 cursor-pointer ${isSelected
                 ? "border-orange-500 bg-orange-500 text-white shadow-[0_12px_24px_-14px_rgba(249,115,22,0.95)] focus:ring-orange-200"

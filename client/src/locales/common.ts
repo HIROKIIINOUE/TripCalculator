@@ -22,6 +22,12 @@ export const commonTranslations = {
       logoutSuccess: "Logged out successfully",
       logoutError: "Failed to log out",
       networkError: "Connection failed. Please check your network status.",
+      loading: "Loading...",
+    },
+    languageOptions: {
+      title: "Language Options",
+      current: "Current",
+      close: "Close",
     },
   },
   ja: {
@@ -48,6 +54,12 @@ export const commonTranslations = {
       logoutError: "ログアウトに失敗しました",
       networkError:
         "通信接続に失敗しました。ネットワーク状況をお確かめください",
+      loading: "読み込み中です...",
+    },
+    languageOptions: {
+      title: "言語オプション",
+      current: "選択中",
+      close: "閉じる",
     },
   },
   fr: {
@@ -73,6 +85,12 @@ export const commonTranslations = {
       logoutSuccess: "Deconnexion reussie",
       logoutError: "Echec de la deconnexion",
       networkError: "La connexion a echoue. Veuillez verifier votre reseau.",
+      loading: "Chargement...",
+    },
+    languageOptions: {
+      title: "Options de langue",
+      current: "Actuel",
+      close: "Fermer",
     },
   },
 } as const;

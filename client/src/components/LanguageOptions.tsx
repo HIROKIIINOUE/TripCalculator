@@ -7,7 +7,7 @@ type Props = {
 
 const LanguageOptions = (props: Props) => {
   const { setIsLanguageOption } = props
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const currentLanguage = i18n.resolvedLanguage;
 
   const handleChangeLanguage = async (language: string) => {
@@ -24,7 +24,7 @@ const LanguageOptions = (props: Props) => {
       <section className="fixed inset-x-4 top-24 z-[60] mx-auto max-w-sm sm:inset-x-0 sm:top-28">
         <div className="relative overflow-hidden rounded-[2rem] border border-white bg-slate-50 p-5 shadow-[0_28px_60px_rgba(15,23,42,0.22)]">
           <h2 className="mt-3 text-xl font-black text-slate-900">
-            Language Options
+            {t("languageOptions.title")}
           </h2>
           <ul className="relative mt-6 space-y-3">
             <li>
@@ -38,7 +38,7 @@ const LanguageOptions = (props: Props) => {
                 </span>
                 {currentLanguage === "en" && (
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-orange-700 transition group-hover:bg-orange-100">
-                    Current
+                    {t("languageOptions.current")}
                   </span>
                 )}
 
@@ -51,11 +51,11 @@ const LanguageOptions = (props: Props) => {
                 className="group flex w-full items-center justify-between rounded-2xl border border-orange-300 bg-orange-50 px-4 py-3 text-left shadow-[0_12px_24px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5 hover:border-orange-300 hover:bg-white cursor-pointer"
               >
                 <span className="block text-sm font-bold text-slate-900">
-                  Japanese(日本語)
+                  Japanese (日本語)
                 </span>
                 {currentLanguage === "ja" && (
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-orange-700 transition group-hover:bg-orange-100">
-                    選択中
+                    {t("languageOptions.current")}
                   </span>
                 )}
               </button>
@@ -71,7 +71,7 @@ const LanguageOptions = (props: Props) => {
                 </span>
                 {currentLanguage === "fr" && (
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-orange-700 transition group-hover:bg-orange-100">
-                    Actuel
+                    {t("languageOptions.current")}
                   </span>
 
                 )}
@@ -84,7 +84,7 @@ const LanguageOptions = (props: Props) => {
             onClick={() => setIsLanguageOption(false)}
             className="relative mt-5 w-full rounded-2xl border border-orange-200 bg-orange-100 px-4 py-3 text-sm font-bold text-orange-800 transition hover:bg-orange-200 cursor-pointer"
           >
-            Close
+            {t("languageOptions.close")}
           </button>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { SUPPORTED_LANGUAGES, type LanguageKey } from "../types/language.type";
 import { commonTranslations } from "../locales/common";
 import { authTranslations } from "../locales/auth";
 import { homeTranslations } from "../locales/home";
+import { tripDetailTranslations } from "../locales/tripDetail";
 
 // reduceは配列を 1 つの値に畳み込むためのメソッド。今回は一つのオブジェクトを作成している。
 const resources = SUPPORTED_LANGUAGES.reduce((acc, lang) => {
@@ -13,6 +14,7 @@ const resources = SUPPORTED_LANGUAGES.reduce((acc, lang) => {
     common: commonTranslations[lang],
     auth: authTranslations[lang],
     home: homeTranslations[lang],
+    tripDetail: tripDetailTranslations[lang],
   };
   return acc;
 }, {} as Resource);
@@ -26,7 +28,7 @@ if (!i18n.isInitialized) {
       fallbackLng: "en",
       supportedLngs: SUPPORTED_LANGUAGES,
       defaultNS: "common", // common内の翻訳の記載はnamespaceを書かずに省略できる
-      ns: ["common", "auth", "home"],
+      ns: ["common", "auth", "home", "tripDetail"],
       detection: {
         order: ["localStorage", "navigator"], // 読み取り順「1,ローカル、2,ブラウザ言語」
         caches: ["localStorage"], // キャッシュはローカル保存

@@ -3,6 +3,7 @@ import { MdDeleteOutline } from "react-icons/md"
 import { useAuth } from "../../../contexts/auth/useAuth"
 import toast from "react-hot-toast"
 import type { TripDetailEvent } from "../../../types/event.type"
+import { useTranslation } from "react-i18next"
 
 type Props = {
   events: TripDetailEvent[]
@@ -14,10 +15,11 @@ type Props = {
 
 const EventOperationButton = (props: Props) => {
   const { accessToken } = useAuth()
+  const { t } = useTranslation("tripDetail")
   const { setEvents, selectedEventIds, setSelectedEventIds, setIsAddModalOpen } = props
 
   const handleDelete = async () => {
-    if (!confirm("選択されたイベントを削除しますか？")) return
+    if (!confirm(t("tripDetail.operation.deleteConfirm"))) return
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL_DEV
 
     try {
@@ -43,16 +45,16 @@ const EventOperationButton = (props: Props) => {
       }))
 
       if (deletedIds.length === selectedEventIds.length) {
-        toast.success("選択されたイベントを削除しました。")
+        toast.success(t("tripDetail.operation.deleteSuccess"))
       } else if (deletedIds.length > 0) {
-        toast.error("一部イベントの削除に失敗しました")
+        toast.error(t("tripDetail.operation.deletePartialFailure"))
       } else {
-        toast.error("イベントの削除に失敗しました")
+        toast.error(t("tripDetail.operation.deleteFailure"))
       }
       setSelectedEventIds([])
     } catch (error) {
       console.error(error)
-      toast.error("ネットワークエラー")
+      toast.error(t("tripDetail.fetch.networkError"))
     }
   }
 
@@ -65,7 +67,7 @@ const EventOperationButton = (props: Props) => {
           className="inline-flex items-center justify-center gap-2 rounded-full border border-red-200 bg-orange-800 px-5 py-2.5 text-sm font-bold text-white shadow-[0_18px_34px_-18px_rgba(220,38,38,0.95)] transition hover:scale-[1.01] hover:from-red-600 hover:to-red-700 focus:outline-none cursor-pointer"
         >
           <MdDeleteOutline className="text-lg" />
-          Delete Event
+          {t("tripDetail.operation.deleteEvent")}
         </button>
       ) : (
         <button
@@ -74,7 +76,7 @@ const EventOperationButton = (props: Props) => {
           className="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_14px_30px_-18px_rgba(249,115,22,0.95)] transition hover:bg-orange-600 focus:outline-none cursor-pointer"
         >
           <IoMdAdd className="text-lg" />
-          Add Event
+          {t("tripDetail.operation.addEvent")}
         </button>
       )}
     </>

@@ -5,6 +5,7 @@ import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { MdCheckBox } from "react-icons/md";
 import { useState } from "react";
 import TripInputModal from "./TripInputModal";
+import { useTranslation } from "react-i18next";
 
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 
 const TripCard = (props: Props) => {
   const { setTrips, trip, selectedTripIds, setSelectedTripIds } = props
+  const { t } = useTranslation("home")
   const isSelected = selectedTripIds.includes(trip.id)
   const formattedDate = trip.startDay.includes("T") ? trip.startDay.split("T")[0] : trip.startDay
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false)
@@ -51,14 +53,14 @@ const TripCard = (props: Props) => {
                   {trip.title}
                 </h3>
                 <p className="text-xs text-stone-500 sm:text-sm">
-                  開始日: {formattedDate}
+                  {t("home.card.startDay")}: {formattedDate}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-stone-600 sm:text-sm">
               <p className="min-w-0 break-words">
-                <span className="mr-2 font-medium text-stone-500">予算</span>
+                <span className="mr-2 font-medium text-stone-500">{t("home.card.budget")}</span>
                 <span className="font-semibold text-stone-900 break-all">
                   {trip.budget.toLocaleString()} {trip.yourCurrency}
                 </span>
@@ -70,14 +72,14 @@ const TripCard = (props: Props) => {
             <button
               type="button"
               onClick={() => setIsUpdateModalOpen(true)}
-              aria-label={`${trip.title}を編集`}
+              aria-label={t("home.operation.editAria", { title: trip.title })}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-300 sm:h-11 sm:w-11 cursor-pointer"
             >
               <FaRegEdit className="text-base" />
             </button>
             <button
               type="button"
-              aria-label={`${trip.title}を選択`}
+              aria-label={t("home.operation.selectAria", { title: trip.title })}
               onClick={handleSelect}
               className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition focus:outline-none focus:ring-2 sm:h-11 sm:w-11 cursor-pointer ${isSelected
                 ? "border-orange-500 bg-orange-500 text-white shadow-[0_12px_24px_-14px_rgba(249,115,22,0.95)] focus:ring-orange-200"

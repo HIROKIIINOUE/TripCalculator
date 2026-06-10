@@ -10,6 +10,17 @@ export const homeTranslations = {
         deleteSuccess: "Selected trips deleted.",
         deletePartialFailure: "Failed to delete some trip data.",
         deleteFailure: "Failed to delete trip data.",
+        editAria: "Edit {{title}}",
+        selectAria: "Select {{title}}",
+      },
+      list: {
+        emptyTitle: "No trip data yet",
+        emptyDescription:
+          "Create a trip from the add button above to manage budget and start date.",
+      },
+      card: {
+        startDay: "Start Date",
+        budget: "Budget",
       },
       modal: {
         addHeading: "Add a Trip",
@@ -56,6 +67,17 @@ export const homeTranslations = {
         deleteSuccess: "選択された旅行を削除しました。",
         deletePartialFailure: "一部データの削除に失敗しました",
         deleteFailure: "データの削除に失敗しました",
+        editAria: "{{title}}を編集",
+        selectAria: "{{title}}を選択",
+      },
+      list: {
+        emptyTitle: "まだ旅行データがありません",
+        emptyDescription:
+          "上部の追加ボタンから旅行を作成して、予算と開始日を管理してください。",
+      },
+      card: {
+        startDay: "開始日",
+        budget: "予算",
       },
       modal: {
         addHeading: "旅行を追加する",
@@ -102,6 +124,17 @@ export const homeTranslations = {
         deleteSuccess: "Voyages selectionnes supprimes.",
         deletePartialFailure: "Echec de la suppression de certaines donnees de voyage.",
         deleteFailure: "Echec de la suppression des donnees de voyage.",
+        editAria: "Modifier {{title}}",
+        selectAria: "Selectionner {{title}}",
+      },
+      list: {
+        emptyTitle: "Aucune donnee de voyage",
+        emptyDescription:
+          "Creez un voyage depuis le bouton d'ajout ci-dessus pour gerer le budget et la date de debut.",
+      },
+      card: {
+        startDay: "Date de debut",
+        budget: "Budget",
       },
       modal: {
         addHeading: "Ajouter un voyage",
