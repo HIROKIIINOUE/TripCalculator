@@ -25,7 +25,7 @@ const TripDetailPage = () => {
   const { t } = useTranslation("tripDetail")
 
 
-  // 該当の旅行情報と紐づくイベントデータの取得
+  // 該当の旅行情報とそれに紐づくイベントデータの取得
   useEffect(() => {
     if (!accessToken) return;
     const getTripAndEvents = async () => {
